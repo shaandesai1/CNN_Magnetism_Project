@@ -11,5 +11,5 @@ Once you are done you can try using the same code in your login node and run sba
 
 Once all of this works, use cnn_largep.py and cnn_largep.batch which will run a supercell and do everything on 2 GPU's. edit cnn_largep.py when you want to change filters etc.
 
-
+See the benchmarking excel sheet of the different configurations already run. Seems like larger learning rates are better.
 
