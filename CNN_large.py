@@ -207,9 +207,9 @@ model = Sequential()
 
 # --- input layer ---
 #no padding #width,height,depth,channels
-model.add(Conv3D(3, kernel_size=(5,5,5), activation='relu', input_shape=(120,120,120,2)))
+model.add(Conv3D(3, kernel_size=(40,40,40), activation='relu', input_shape=(120,120,120,2)))
 # --- max pool ---
-model.add(MaxPooling3D(pool_size=(2,2,2),data_format='channels_last'))
+model.add(MaxPooling3D(pool_size=(5,5,5),data_format='channels_last'))
 
 # --- next layer ---
 # we could double the number of filters as max pool made the 
@@ -272,6 +272,6 @@ model.fit(x_train, y_train,
 
 # In[ ]:
 
-model.save('cnn_test1.h5')  # creates a HDF5 file 'my_model.h5'
-del model  # deletes the existing model
+#model.save('cnn_test1.h5')  # creates a HDF5 file 'my_model.h5'
+#del model  # deletes the existing model
 

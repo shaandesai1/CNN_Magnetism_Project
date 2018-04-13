@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH -J expnew4
+#SBATCH -o expnew4.out
+#SBATCH -e expnew4.err
+#SBATCH -p holyseasgpu
+#SBATCH -n 1
+#SBATCH --gres=gpu:2
+#SBATCH -t 0-01:10
+#SBATCH --constraint=cuda-7.5
+#SBATCH --mem=12000
+module load gcc/4.8.2-fasrc01 cuda/7.5-fasrc02 tensorflow/1.3.0-fasrc01
+source activate main
+python cnn_largep.py
+

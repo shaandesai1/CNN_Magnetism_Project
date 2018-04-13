@@ -4,7 +4,7 @@
 import numpy as np
 import pickle
 import pandas as pd
-
+from keras.utils import multi_gpu_model
 import keras
 from keras.datasets import mnist
 from keras.models import Sequential
@@ -12,7 +12,7 @@ from keras.layers import Dense, Activation, Flatten, Conv3D,MaxPooling3D
 from keras.optimizers import SGD
 from keras import backend as K
 from keras.models import load_model
-
+import tensorflow as tf
 
 
 # #### Core dataframe processing functions
@@ -202,32 +202,33 @@ print(y_train.shape)
 
 # In[38]:
 
-# create an empty network model
-model = Sequential()
+# create an empty network model parallel
+with tf.device('/cpu:0'):
+	model = Sequential()
 
 # --- input layer ---
 #no padding #width,height,depth,channels
-model.add(Conv3D(3, kernel_size=(5,5,5), activation='relu', input_shape=(120,120,120,2)))
+	model.add(Conv3D(3, kernel_size=(5,5,5), activation='relu', input_shape=(120,120,120,2)))
 # --- max pool ---
-model.add(MaxPooling3D(pool_size=(2,2,2),data_format='channels_last'))
+	model.add(MaxPooling3D(pool_size=(2,2,2),data_format='channels_last'))
 
 # --- next layer ---
 # we could double the number of filters as max pool made the 
 # feature maps much smaller 
 # just not doing this to improve runtime
-model.add(Conv3D(5, kernel_size=(3,3,3), activation='relu'))
+	model.add(Conv3D(5, kernel_size=(3,3,3), activation='relu'))
 # --- max pool ---
-model.add(MaxPooling3D(pool_size=(2,2,2),data_format='channels_last'))
+	model.add(MaxPooling3D(pool_size=(2,2,2),data_format='channels_last'))
 
 # flatten for fully connected classification layer
-model.add(Flatten())
+	model.add(Flatten())
 # note that the 2 is the number of classes we have
 # the classes are mutually exclusive so softmax is a good choice
 # --- fully connected layer ---
-model.add(Dense(12, activation='relu'))
+	model.add(Dense(12, activation='relu'))
 
 # --- classification ---
-model.add(Dense(2, activation='softmax'))
+	model.add(Dense(2, activation='softmax'))
 
 # prints out a summary of the model architecture
 #model.summary()
@@ -235,11 +236,16 @@ model.add(Dense(2, activation='softmax'))
 
 # In[39]:
 
+# Paralelism
+parallel_model = multi_gpu_model(model,gpus=2)
+
+
+
 # this does all necessary compiling. In tensorflow this is much quicker than in theano
 # the setup is our basic categorical crossentropy with stochastic gradient decent
 # we also specify that we want to evaluate our model in terms of accuracy
 sgd = SGD(lr=1, momentum=0.9)
-model.compile(loss='categorical_crossentropy',
+parallel_model.compile(loss='categorical_crossentropy',
               optimizer=sgd,
               metrics=['accuracy'])
 
@@ -256,9 +262,10 @@ model.compile(loss='categorical_crossentropy',
 # in our case we just use it to monitor the evolution of the model over the training epochs
 # if we use the validation data to determine when to stop the training or which model to save, we 
 # should not use the test data, but a separate validation set. 
-batch_size = 20
+batch_size = 40
+#replicates model on N number of GPUs
 
-model.fit(x_train, y_train,
+parallel_model.fit(x_train, y_train,
             batch_size=batch_size,
             epochs=1,
            verbose=1,
@@ -272,6 +279,6 @@ model.fit(x_train, y_train,
 
 # In[ ]:
 
-model.save('cnn_test1.h5')  # creates a HDF5 file 'my_model.h5'
-del model  # deletes the existing model
+#model.save('cnn_test1.h5')  # creates a HDF5 file 'my_model.h5'
+#del model  # deletes the existing model
 
