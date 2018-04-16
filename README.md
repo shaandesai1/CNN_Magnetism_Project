@@ -1,4 +1,4 @@
-# CNN_298R
+# CNN_299R
 <b>CNN Magnetism Project for AC299R - Shaan Desai</b>
 
 The code in this repo allows you to run a Convolutional Neural Network with 3D charge density profiles as input. The code is configured to run both locally and on Harvard FAS RC GPU's.
