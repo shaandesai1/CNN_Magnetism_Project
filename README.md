@@ -1,9 +1,9 @@
 # CNN_298R
-CNN Magnetism Project for AC299R - Shaan Desai
+<b>CNN Magnetism Project for AC299R - Shaan Desai</b>
 
 The code in this repo allows you to run a Convolutional Neural Network with 3D charge density profiles as input. The code is configured to run both locally and on Harvard FAS RC GPU's.
 
-Workflow
+<b>Workflow</b>
 
 1. Pull all composite DFT calculations into one folder using chgcar.py when collecting data from the supercomputer that runs DFT calcs.
 2. Run magdensity splitter on CHGCAR files to split (spin up + spin down) from (spin up - spin down) and store the latter in a magnetic densities folder.
@@ -11,7 +11,7 @@ Workflow
 4. To run the convolution locally use the notebook, it basically configures a simple 2/3D convolution of the inputs and is a great way to test whether you have the right files. Make sure the convolutions have small filter sizes (e.g. 5,5,5) since larger weights require a lot of memory and CPU's aren't good for this. 
 5. You can play with the architecture and will soon realize the code runs very slowly (especially if using Conv3D), as such we need to run this on GPU's:
 
-Instructions to get setup using a GPU:
+<i>Instructions to get setup using a GPU</i>
 
 Read through the evernote on GPU's in Odyssey (v2.0). The quickest way to setup is to initially just use CNN.py and folow the instructions to create a conda environment and install keras in it as well as load modules. Initially the file you will need is tester.py which is a CNN that runs on the MNIST dataset. You will have to use srun to run the code or you can create a small sbatch file to run it.
 
@@ -23,4 +23,14 @@ Once all of this works, use cnn_largep.py and cnn_largep.batch which will run a 
 See the benchmarking excel sheet of the different configurations already run and results I can provide. Seems like larger learning rates are better.
 
 6. After running your code, you can copy the h5 file output into your local machine and run visualizer.ipynb which will let you see projections of your filter.
+
+
+<b>Notes on Architecture</b>
+
+- The point of running this model is to be able to capture patterns such as Nearest Neighbor exchange in filters. Note that Sivadas et al show that these occur on the order of atomic lengths which means we should probably scale our unit cell to a supercell (done in cnn_largep.py in function matmul) as well as increase our filter sizes to greater than 60 in each dimension.
+- We need to think carefully about the classification model we are building. At present, we are classifying composites as 1's if they have a bohr magneton > 4. However, this cutoff was determined using a histogram.
+- At present we believe we should have 3 filters because this is consistent with Sivadas et al and the number of patterns they present, however, it might be the case that more are needed to capture superexchange.
+- Need to figure out how to get granularity.
+- Need to understand why a large learning rate yields a more interpretable pattern.
+- Need more datab
 
