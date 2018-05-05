@@ -10,7 +10,7 @@ Over the past decade, two-dimensional materials have demonstrated immense potent
 <img src="fig1_ml.png">
 </p>
 
-<p align="center">Figure 1. Monolayer structure of a Transition Metal Dichalcogenide in the 2H phase where yellow spheres represent chalcogens and blakc spheres represent metals. By decorating these lattice sites with different atoms from the periodic table, we can develop a large space of testable '2-D' materials (adapted from Qing Hua Wang et al [4]) <p align="center">
+<p align="center">Figure 1. Monolayer structure of a Transition Metal Dichalcogenide in the 2H phase where yellow spheres represent chalcogens and blakc spheres represent metals. By decorating these lattice sites with different atoms from the periodic table, we can develop a large space of testable '2-D' materials (adapted from Qing Hua Wang et al [4]) </p>
 
 
 For many years research groups have focused on improving density functional theory (DFT) calculations to capture such properties [5,6]. Yet these methods tend to be computationally and financially costly. Machine learning (ML) is rapidly paving the way to accurate property predictions in a much faster and cost-effective manner [7]. In addition, ML tools create avenues through which we can develop a better understanding of the properties themselves. For example, Pilania et.al have shown that machine learning methods can be used to accurately model bandgaps of double perovskites [8]. Furthermore, ML methods have also been shown to capture an understanding of the underlying physics in layers of a Neural Network trained to reproduce DFT results [9,10]. Given this, we decided to build a convolutional neural network architecture to develop a better understanding of magnetism in transition metal trichalcogenides( see fig2). Our preliminary results indicate that our model can capture large patterns linked to fluctuations in spin density across lattice sites. However, the microscopic origins of magnetism in these density profiles have not been identified yet through this approach.
@@ -51,7 +51,7 @@ Furthermore, they visually illustrate [FIG x] how these interactions could take 
 <img src="sivadas.png">
 </p>
 
-<p align="center">Figure x.3 pathways presented for Nearest Neighbor exchange. a) represents the second nearest neighbor, b) the third and c) the first (direct exchange-vertical and superexchange- 87.9 angle). <p align="center">
+<p align="center">Figure x.3 pathways presented for Nearest Neighbor exchange. a) represents the second nearest neighbor, b) the third and c) the first (direct exchange-vertical and superexchange- 87.9 angle). </p>
 
 
 These results inspired us to ask the following question: can we find evidence of exchange interactions (patterns) by analyzing the spin density profiles (images) of 2-D materials? One natural approach for this was to use a convolutional neural network (CNN). 
@@ -64,7 +64,7 @@ A Convolutional Neural Network is an ML algorithm which takes images as inputs a
 <img src="cnnarch.JPG">
 </p>
 
-<p align="center">Figx. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activationss. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter) <p align="center">
+<p align="center">Figx. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activationss. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter) </p>
 
 CNN’s have been used quite successfully for pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters [CITE]. Given this, we thought CNN’s would be a great way to detect patterns (exchange interactions) in large images (electron density profiles).
 
@@ -86,7 +86,7 @@ For each composite, DFT total energies of the relaxed structures were calculated
 <img src="lattice.JPG">
 </p>
 
-<p align="center">Figx. Left: unit cell of Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> (in the x-y plane) with spin density isosurfaces overlaid at charge values of 7.3e-5. The yellow surfaces are positive densities and the blue are negative. Blue spheres represent Chromium sites, purple spheres represent Germanium and yellow sphere represent Tellerium. Right: average projection of charge densities in the x-y plane.  <p align="center">
+<p align="center">Figx. Left: unit cell of Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> (in the x-y plane) with spin density isosurfaces overlaid at charge values of 7.3e-5. The yellow surfaces are positive densities and the blue are negative. Blue spheres represent Chromium sites, purple spheres represent Germanium and yellow sphere represent Tellerium. Right: average projection of charge densities in the x-y plane.  </p>
 
 
 
@@ -98,7 +98,7 @@ To begin our investigation, we used the FM spin configuration which comprise mix
 <img src="bohr.JPG">
 </p>
 
-<p align="center">Distribution of response variables appears to illustrate mixture of two gaussians. As such, we use the mean, highlighted in green, as the splitting criteria which leads to 37 values below 4 Bohr magnetons and 25 above.  <p align="center">
+<p align="center">Distribution of response variables appears to illustrate mixture of two gaussians. As such, we use the mean, highlighted in green, as the splitting criteria which leads to 37 values below 4 Bohr magnetons and 25 above.  </p>
 
 
 
