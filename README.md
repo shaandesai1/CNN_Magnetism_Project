@@ -1,5 +1,7 @@
 # CNN_299R
+
 <b>CNN Magnetism Project for AC299R - Shaan Desai</b>
+
 <b>Using convolutional neural networks to understand magnetism in two-dimensional ferromagnetic structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> - Shaan Desai</b>
 
 ## Introduction
@@ -25,25 +27,50 @@ For many years research groups have focused on improving density functional theo
 
 ## Background
 
-Our choice of algorithm and data to address this challenge was governed by our current understanding of magnetism, and this is particularly important in physics because we need to design interpretable models. We know that magnetism in materials arises because of the quantum nature of electrons [9]. Specifically, we know that the net magnetic moment (J) of a single atom is:
+Our choice of algorithm and data to address this challenge was governed by our current understanding of magnetism. We know that magnetism in materials arises because of the quantum nature of electrons [9]. Specifically, we know that the net magnetic moment (J) of a single atom is:
 
 <p align="center"> 
 J=L±S
 </p>
 
-Where L is the orbital angular momentum of the electron around the nucleus and S is the intrinsic spin angular momentum of the electron. When many atoms are placed next to each other in a crystalline structure, it is possible for electrons in the atomic orbitals to overlap and adhere to the Pauli exclusion principle (which states that two or more identical fermions cannot occupy the same quantum state within a quantum system). As a consequence, the spins can order in a particular manner, for instance they can align in either parallel or anti-parallel configurations. The Heisenberg model is a statistical mechanics model used to study these interactions. It assumes that the dominant coupling between two dipoles may cause nearest-neighbors to have lowest energy when they are aligned. This results in a Hamiltonian on a honeycomb lattice where:
-H= J_1 ∑_(<i,j>)▒〖σ_i σ_j 〗
-In which σ_i is the spin of one of the atomic electrons and J1 is the interaction term that tells us how the spins of nearest neighbor atoms interact. For a long time, it was believed that this law would hold in 2D materials. However, Sivadas et al recently showed that by adding J2 and J3 interaction terms (second and third nearest neighbor interactions), they were able to obtain results that aligned much more closely with experiment [10]. The resulting equation is:
-H= J_1 ∑_(<i,j>)▒〖σ_i σ_j 〗+ J_2 ∑_(<i,j>)▒〖σ_i σ_j 〗+ J_3 ∑_(<i,j>)▒〖σ_i σ_j 〗
-Furthermore, they visually illustrate [FIG x] potential pathways for how these exchange interactions could be taking place.
- 
+Where L is the orbital angular momentum of the electron around the nucleus and S is the intrinsic spin angular momentum of the electron. When many atoms are placed next to each other in a crystalline structure, it is possible for electrons in the atomic orbitals to overlap and adhere to the Pauli exclusion principle (which states that two or more identical fermions cannot occupy the same quantum state within a quantum system). As a consequence, the spins can order in a particular manner, for instance they can align in either parallel or anti-parallel configurations. These spin orderings can be modeled using the Heisenberg model. It assumes that the dominant coupling between two dipoles may cause nearest-neighbors to have lowest energy when they are aligned. This results in a Hamiltonian on a honeycomb lattice where:
+
+<p align="center"> 
+<img src="ham1.png">
+</p>
+
+
+In which σ<sub>i</sub> is the spin of one of the atomic electrons and J<sub>1</sub> is the interaction term that tells us how the spins of nearest neighbor atoms interact. In general, additional interactions between other atomic sites are neglected because the J<sub>1</sub> interaction is dominant in bulk crystals. This was also assumed to be the case in 2-D materials until Sivadas et al  showed that by adding J<sub>2</sub> and J<sub>3</sub> interaction terms into the Hamiltonian for 2-D materials (second and third nearest neighbor interactions), they were able to obtain results that agreed better with experiment [10]. Their resulting Heisenberg model is:
+
+<p align="center"> 
+<img src="ham2.png">
+</p>
+
+Furthermore, they visually illustrate [FIG x] how these interactions could take place.
+
+<p align="center"> 
+<img src="sivadas.png">
+</p>
+
+<p align="center">Figure x. ABX<sub>3</sub> structure of a transition metal trichalcogenide. 'A' sites represent Transition Metals, 'B' sites typically represent group 4 and 5 atoms and 'X' sites represent the chalcogens (group 6). <p align="center">
+
+
+These results inspired us to ask the following question: can we find evidence of exchange interactions (patterns) by analyzing the spin density profiles (images) of 2-D materials? One natural approach for this was to use a convolutional neural network (CNN). 
+A Convolutional Neural Network is an ML algorithm which takes images as inputs and then convolves these images with 'filters' to produce outputs which can be pooled/flattened or used to make a decision. An example architecture is highlighted in fig x.
+
+<p align="center"> 
+<img src="cnnarch.jpg">
+</p>
+
+<p align="center">Figx. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activationss. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter) <p align="center">
 
 
 
- These results inspired us to ask the question as to whether we could visually capture these exchange interactions (patterns) from spin density profiles (images) of 2-D materials. One natural choice for this was a convolutional neural network. CNN’s have been used quite successfully in pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters. Given this, we thought CNN’s would be a great way to detect patterns (exchange interactions) in large images (electron density profiles).
+CNN’s have been used quite successfully for pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters [CITE]. Given this, we thought CNN’s would be a great way to detect patterns (exchange interactions) in large images (electron density profiles).
 
 
-Methodology
+## Methodology
+
 We used DFT to build a database of structures based on Cr2Ge2Te6. Our motivation in doing so was to replace the individual sites by different, relatively close, atoms so that we could obtain minor variations in the magnetic densities and states for training. We did this by replacing one of two chromium atoms (A sites) in unit cells with a transition metal. We restricted the transition metals to (Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru) in order to comprise most of the first row of TM’s and a few of the second. Substitutions for B were Ge,Ge0.5Si0.5,Ge0.5P0.5,Si and P. X sites were decorated with S, Se or Te. (Alternatively, see the table x).
 
 A site candidates	B site candidates	X site candidates
