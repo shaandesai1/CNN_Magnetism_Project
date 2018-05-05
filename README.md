@@ -10,7 +10,7 @@ Over the past decade, two-dimensional materials have demonstrated immense potent
 
 
 <p align="center"> 
-<img src="fig1_new.png">
+<img src="fig1_ml.png">
 </p>
 
 <p align="center">Figure 1. Monolayer structure of a Transition Metal Dichalcogenide in the 2H phase where yellow spheres represent chalcogens and blakc spheres represent metals. By decorating these lattice sites with different atoms from the periodic table, we can develop a large space of testable '2-D' materials (adapted from Qing Hua Wang et al [4]) <p align="center">
@@ -36,14 +36,14 @@ J=L±S
 Where L is the orbital angular momentum of the electron around the nucleus and S is the intrinsic spin angular momentum of the electron. When many atoms are placed next to each other in a crystalline structure, it is possible for electrons in the atomic orbitals to overlap and adhere to the Pauli exclusion principle (which states that two or more identical fermions cannot occupy the same quantum state within a quantum system). As a consequence, the spins can order in a particular manner, for instance they can align in either parallel or anti-parallel configurations. These spin orderings can be modeled using the Heisenberg model. It assumes that the dominant coupling between two dipoles may cause nearest-neighbors to have lowest energy when they are aligned. This results in a Hamiltonian on a honeycomb lattice where:
 
 <p align="center"> 
-<img src="ham1.png">
+<img src="ham1.JPG">
 </p>
 
 
 In which σ<sub>i</sub> is the spin of one of the atomic electrons and J<sub>1</sub> is the interaction term that tells us how the spins of nearest neighbor atoms interact. In general, additional interactions between other atomic sites are neglected because the J<sub>1</sub> interaction is dominant in bulk crystals. This was also assumed to be the case in 2-D materials until Sivadas et al  showed that by adding J<sub>2</sub> and J<sub>3</sub> interaction terms into the Hamiltonian for 2-D materials (second and third nearest neighbor interactions), they were able to obtain results that agreed better with experiment [10]. Their resulting Heisenberg model is:
 
 <p align="center"> 
-<img src="ham2.png">
+<img src="ham2.JPG">
 </p>
 
 Furthermore, they visually illustrate [FIG x] how these interactions could take place.
@@ -59,7 +59,7 @@ These results inspired us to ask the following question: can we find evidence of
 A Convolutional Neural Network is an ML algorithm which takes images as inputs and then convolves these images with 'filters' to produce outputs which can be pooled/flattened or used to make a decision. An example architecture is highlighted in fig x.
 
 <p align="center"> 
-<img src="cnnarch.jpg">
+<img src="cnnarch.JPG">
 </p>
 
 <p align="center">Figx. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activationss. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter) <p align="center">
