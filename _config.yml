@@ -5,3 +5,7 @@ kramdown:
     math_engine: mathjax
     input: GFM
     syntax_highlighter: rouge
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
