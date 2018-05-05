@@ -8,11 +8,7 @@ Over the past decade, two-dimensional materials have demonstrated immense potent
 
 
 
-![alt text](fig1.png).center[]
-
-.caption[
-**Fig. 1:** Image caption
-]
+.center[![alt text](fig1.png)]
 
 
 
