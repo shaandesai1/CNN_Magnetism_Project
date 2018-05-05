@@ -76,25 +76,13 @@ We used DFT to build a database of structures based on Cr<sub>2</sub>Ge<sub>2</s
 
 <table style=”margin:1em auto;”>
 	
-  <tr>
-    <th>Site</th>
-    <th>Element</th> 
-  </tr>
-  <tr>
-    <td>A</td>
-    <td>Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru</td> 
-  </tr>
-  <tr>
-    <td>B</td>
-    <td>Ge,Ge<sub>0.5</sub>Si<sub>0.5</sub>,Ge<sub>0.5</sub>P<sub>0.5</sub>,Si,P</td> 
-  </tr>
-  <tr>
-    <td>X</td>
-    <td>S,Se,Te</td> 
-  </tr>
-</table>	
+| Site        | Element      
+| ------------- |:-------------:|
+| A   | Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru |
+| B   | Ge,Ge<sub>0.5</sub>Si<sub>0.5</sub>,Ge<sub>0.5</sub>P<sub>0.5</sub>,Si,P |
+| X   | S,Se,Te|
 
-
+ 
 For each composite, DFT total energies of the relaxed structures were calculated for several initial spin configurations: non-spin polarized, ferromagnetic and Neel antiferromagnetic. The resultant spin density profiles (60X60X120 images [FIG x]) contain information relevent to magnetism and thus served as input to our ML models. 
 
 <p align="center"> 
