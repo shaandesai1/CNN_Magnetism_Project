@@ -11,6 +11,9 @@ Over the past decade, two-dimensional materials have demonstrated immense potent
 <img src="fig1.png">
 </p>
 
+<p align="center">Figure 1. Monolayer structure of a Transition Metal Dichalcogenide in the 2H phase where yellow spheres represent chalcogens and blakc spheres represent metals. By decorating these lattice sites with different atoms from the periodic table, we can develop a large space of testable '2-D' materials (adapted from Qing Hua Wang et al [4]) <p align="center">
+
+
 The code in this repo allows you to run a Convolutional Neural Network with 3D charge density profiles as input. The code is configured to run both locally and on Harvard FAS RC GPU's.
 
 <b>Workflow</b>
