@@ -94,29 +94,22 @@ We used DFT to build a database of structures based on Cr2Ge2Te6. Our motivation
 For each composite, DFT total energies of the relaxed structures were calculated for several initial spin configurations: non-spin polarized, ferromagnetic and Neel antiferromagnetic. The resultant spin density profiles (60X60X120 images [FIG x]) contain information relevent to magnetism and thus served as input to our ML models. 
 
 <p align="center"> 
-<img src="spindensity.jpg">
+<img src="lattice.JPG">
 </p>
 
-<p align="center">Figx. Plots of the spin density isosurfaces of TMTMC's. <p align="center">
+<p align="center">Figx. Left: unit cell of Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> (in the x-y plane) with spin density isosurfaces overlaid at charge values of 7.3e-5. The yellow surfaces are positive densities and the blue are negative. Blue spheres represent Chromium sites, purple spheres represent Germanium and yellow sphere represent Tellerium. Right: average projection of charge densities in the x-y plane.  <p align="center">
 
 
 
 
 
-To begin our investigation, we used the FM spin configuration from which we had 64 spin densities. We also needed a target (response) variable and decided to use magnetic moment as a means for classification. For our initial model we chose 4 Bohr magnetons (the median of our distributions) as a splitting criterion for training a classification model (see fig x). Note, our 3-D charge densities are handled easily by the python Neural Network packages, keras and tensorflow. 
+To begin our investigation, we used the FM spin configuration which comprise mixing of all the A and B sites shown in Table x with X = Te. We also needed a target (response) variable and decided to use magnetic moment as a means for classification. For our initial model we chose 4 Bohr magnetons (the median of our distribution) as a splitting criterion for training a classification model (see fig x). Note, our 3-D charge densities are handled easily by the python Neural Network packages, keras and tensorflow. 
  
+<p align="center"> 
+<img src="bohr.png">
+</p>
 
-
-
-One big challenge with using Convolutional Neural Networks is that they have many parameters and can be as complex or as simple as we would like them to be. To tackle this problem in a systematic way we decided to think more closely about what convolutions were doing to our input image and what we were hoping to extract. Here we outline some of our preliminary design decisions:
-	We wanted to start out with a simple model and then tune parameters accordingly. As such, we decided our model would simply have one convolutional layer, one pooling layer and one flatten/dense layer. The motivation for this is that the simpler the model, the more interpretable it is.
-	Our model is looking for NN exchange patterns which occur on length scales the order of atomic distances. Therefore, we took our unit cell spin densities and expanded them to supercells so that filters can scan over and detect these ‘long’ range interactions.
-	Since we were hoping to find 3 or 4 NN exchange interactions, we designed our first convolutional layer to have 3 filters. We later varied the number of filters to get a sense for the kind of variations in patterns recognized (see results).
-	A large kernel size of (40X40X40) was initially chosen because this would force the CNN filters to learn larger patterns (something we are looking for). It must be noted that smaller kernels underfit and larger filters overfit and one needs to cross validate to find the right size with the constraint here that they shouldn’t be too small since this could result in a non-interpretable model.
-	A relu activation unit was used to prevent the zeroing out of filter weights.
-	A pool size of (2X2X2) was chosen so that additional convolutional layers could be added later since larger pool sizes mean significant shrinkage.
-	A flatten layer was used with a dense layer of size 2 and a softmax for classification since there are only 2 categories.
-	Strides for the convolutional layers were varied across experimental runs because we had little prior knowledge for what they should be set at. We do know that small strides mean more information encoded in our layers, but this also means more computation. Accounting for this trade-off we varied these in our trials.
+<p align="center">Distribution of response variables appears to illustrate mixture of two gaussians. As such, we use the mean, highlighted in green, as the splitting criteria which leads to 37 values below 4 Bohr magnetons and 25 above.  <p align="center">
 
 
 
@@ -124,16 +117,20 @@ One big challenge with using Convolutional Neural Networks is that they have man
 
 
 
+One big challenge with using Convolutional Neural Networks is that they have many parameters and can be quite complex. To tackle this problem in a systematic way we decided to think more closely about what convolutions were doing to our input image and what we were hoping to extract. Here we outline some of our preliminary design decisions:
+1. We wanted to start out with a simple model and then tune parameters accordingly. As such, we decided our model would simply have one convolutional layer, one pooling layer and one flatten/dense layer. The motivation for this is that the simpler the model, the more interpretable it is.
+2. Since we were hoping to find 3 or 4 NN exchange interactions, we designed our first convolutional layer to have 3 filters. We later varied the number of filters to get a sense for the kind of variations in patterns recognized (see results).
+3. A large kernel size of (40X40X40) was initially chosen because this would force the CNN filters to learn larger patterns (something we are looking for). It must be noted that smaller kernels underfit and larger filters overfit and one needs to cross validate to find the right size with the constraint here that they shouldn’t be too small since this could result in a non-interpretable model.
+4. Our model is looking for NN exchange patterns which occur on length scales the order of atomic distances. Therefore, we took our unit cell spin densities and expanded them to supercells so that filters can scan over and detect these ‘long’ range interactions.
+5. Strides for the convolutional layers were varied across experimental runs because we had little prior knowledge for what they should be set at. We do know that small strides mean more information encoded in our layers, but this also means more computation. Accounting for this trade-off we varied these in our trials.
+6. A relu activation unit was used to prevent the zeroing out of filter weights.
+7. A pool size of (2X2X2) was chosen so that additional convolutional layers could be added later since larger pool sizes mean significant shrinkage.
+8. A flatten layer was used with a dense layer of size 2 and a softmax for classification since there are only 2 categories.
+9. These are the output shapes with a convolution layer of (60,60,60), stride of (2,2,2), input size of (120,120,120) and pooling of (2,2,2) printed here for reference. We decided to use SGD since it prevents us from getting stuck in local minima. A learning rate was set and then varied across the trials to determine the best rate in our validation set. The choice of batch size significantly affects our ability to get to the local minima but large batch sizes tend to be memory intensive. Thus, we started off with a batch size of 20 since this system ran in a reasonable time on a GPU and most models converged quite rapidly with this size. Most convolutional nets have a channels parameter which is usually meant to reflect different colors (e.g.  rgb) or different types of the same image. Our spin densities naturally fit into the black and white color scheme since some densities were negative and others were positive. We therefore divided the data accordingly. A train test split of 70-30% was used and 5 Epochs were run.
 
 
+## Results
 
-	These are the output shapes with a convolution layer of (60,60,60), stride of (2,2,2), input size of (120,120,120) and pooling of (2,2,2) printed here for reference.
-	We decided to use SGD since it prevents us from getting stuck in local minima. A learning rate was set and then varied across the trials to determine the best rate in our validation set.
-	The choice of batch size significantly affects our ability to get to the local minima but large batch sizes tend to be memory intensive. Thus, we started off with a batch size of 20 since this system ran in a reasonable time on a GPU and most models converged quite rapidly with this size.
-	Most convolutional nets have a channels parameter which is usually meant to reflect different colors (e.g.  rgb) or different types of the same image. Our spin densities naturally fit into the black and white color scheme since some densities were negative and others were positive. We therefore divided the data accordingly.
-	A train test split of 70-30% was used.
-	5 Epochs were run.
-Results
 Since these are only our preliminary results, we segment them according to the various parameters we swept over. To do this we needed to define a base model. Using the parameters discussed previously we use the following as our base model:
 
 
