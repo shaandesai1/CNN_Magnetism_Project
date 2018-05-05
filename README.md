@@ -133,12 +133,9 @@ With the given parameters, we swept over multiple filters and filter sizes to se
 <p align="center"> 
 <img src="lr1.JPG">
 </p>
-
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+<p align="center"> 
+<img src="lr2.png">
+</p>
 
 
 <p align="center"> 
@@ -148,34 +145,42 @@ Fig X. The figures illustrate the first filter averaged along the x dimension fr
 Given that a high learning rate led to good accuracies and an interpretable filter, we ran numerous test which we hihglight below.
 
 ### Varying # of kernels
+<p align="center"> 
+<img src="filterno.JPG">
+</p>
+<p align="center"> 
+<img src="filterno1.JPG">
+</p>
 
+<p align="center"> 
+Fig X. 
+</p>
 
-Accuracy/Epoch	Number of Filters
-	2	3	4
-Training/ 1	0.5349	0.6047	0.5349
-Validation/ 1	0.5789	0.5789	0.4211
-Training/ 5	0.6047	0.6047	0.3953
-Validation/ 5	0.5789	0.5789	0.4211
 
 ### Varying pool size
 
+<p align="center"> 
+<img src="poolno.JPG">
+</p>
+<p align="center"> 
+<img src="poolno1.JPG">
+</p>
+<p align="center"> 
+Fig X. 
+</p>
 
-Accuracy/Epoch	Pool Size
-	1	2	3
-Training/ 1	0.5349	0.6047	0.6977
-Validation/ 1	0.5789	0.5789	0.5789
-Training/ 5	0.6047	0.6047	0.6047
-Validation/ 5	0.5789	0.5789	0.5789
+### Varying learning rate
 
-### Varying learning rate 
+<p align="center"> 
+<img src="lrnew.JPG">
+</p>
+<p align="center"> 
+<img src="lrnew1.JPG">
+</p>
+<p align="center"> 
+Fig X. 
+</p>
 
-
-Accuracy/Epoch	SGD LR
-	1	100	10000
-Training/ 1	0.5814	0.6047	0.6047
-Validation/ 1	0.5789	0.5789	0.5789
-Training/ 5	0.6047	0.6047	0.6047
-Validation/ 5	0.5789	0.5789	0.5789
 
 From these results we can see that 3 filters with a pool size of 2 and learning rate of 100 do a decent job in terms of validation accuracy within the first epoch. Furthermore, the filters in this configuration (all the middle figures) illustrate a recognizable pattern in the top right corner. However, further tuning the kernel size and other parameters could significantly influence the resultant image as we have seen in the figures above. The sensitivity to these changes might stem from the little data we have and it will be useful to expand our training from the 66 datapoints to a larger set. In addition, it might be crucial to rethink our binary response variable. Perhaps we should make this a multi-class classification problem.
 
@@ -185,21 +190,28 @@ From these results we can see that 3 filters with a pool size of 2 and learning 
 
 ## Conclusion
 
-While ML methods have rapidly gained attention over the past few years as a novel set of tools to solve high dimensional problems, applying them to specific problems involves a significant amount of care and attention to detail. As we have shown, attempting to extract information from charge density profiles using convolutional nets involves tuning numerous parameters and checking how performance and filters change. In doing so we found a high level of sensitivity in response to changes in parameters but we were also able to demonstrate that filters can extract some macro level information from the charge profiles. This only marks one part of the challenge, the other being one of computational/memory cost. As the problem got bigger we needed to use high performance computing (e.g. GPUs) and while this did speed up our calculations, increasing certain parameters such as the number of convolutional layers dramatically slowed down computations and added memory cost. With that said, there does appear to be some underlying physics captured in the filters, it simply requires the right amount of tuning and more data to ensure predictable results.
-
-
+Initial effors to extract patterns from spin density profiles of 2-D FM materials show great promise. Patterns learned from smaller filters appear to describe atomic orbitals well. Closer investigation into the framework may lead to a deeper understanding of the microscopic origins of magnetism. 
 
 ## References
 https://www.earth.ox.ac.uk/~conallm/Phys-princip.pps
 [1] M.A. McGuire, H. Dixit, V.R. Cooper, and B. C. Sales, Chem.Mater. 27, 612 (2015)
+
 [2] Y. Takano, N. Arai, A. Arai, Y. Takahashi, K. Takase, and K. Sekizawa, J. Magn. Magn. Mater. 272, E593 (2004)
+
 [3] Gong. Cheng, Li. Lin, Li. Zhenglu et al, Nature 546, 265-269 (2017)
+
 [4] Shi. Xinying, Huang. Zhongjia, Huttula, Marko, Li. Taohai, Li. Suya, Wang. Xiao, Luo. Youhua, Zhang. Meng, Cao. Wei, MDPI. Crystals 8(1), 24 (2018)
+
 [5] Li. Jiao, Fan. Xinyu, Wei. Yanpei, and Chen. Gang. Nature Sci. Rep. 6, 31840 (2016)
+
 [6] Hegde. Ganesh, and B. R. Chris. Nature Sci. Rep. 7, 42669 (2017)
+
 [7] Pilania. G, A. Mannodi-Kanakkithodi, B.P. Uberuagu, R. Ramprasad, J.E.Gubernatis, and T. Lookman. Nature Sci.Rep. 6, 19375 (2016)
+
 [8] E.D. Cubuk, M.D. Brad, O. Berk, W. Amos, E. Kaxiras. J. Chem. Phys. 147, 024104 (2017)
+
 [9] J. M. D. Coey. Cambridge Press. 9780521816144 (2009)
+
 [10] N. Sivadas, M.W. Daniels, R.H.Swendsen,S.Okamoto, and D.Xiao. J. Phys. Rev. B. 91, 235425 (2015)
 
 
