@@ -2,7 +2,7 @@
 
 <b>CNN Magnetism Project for AC299R - Shaan Desai</b>
 
-<b>Using convolutional neural networks to understand magnetism in two-dimensional ferromagnetic structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> - Shaan Desai</b>
+<b>Using convolutional neural networks to understand magnetism in two-dimensional ferromagnetic structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> </b>
 
 ## Introduction
 
