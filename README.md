@@ -74,7 +74,7 @@ CNN’s have been used quite successfully for pattern recognition in images. For
 We used DFT to build a database of structures based on Cr2Ge2Te6. Our motivation in doing so was to replace the individual sites by different atoms so that we could obtain variations in the magnetic densities and order for training the ML model. We did this by replacing one of two chromium atoms (A sites) in unit cells with a transition metal. We restricted the transition metals to (Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru) in order to comprise most of the first row of TM’s and a few of the second. Substitutions for B were Ge,Ge0.5Si0.5,Ge0.5P0.5,Si and P. X sites were decorated with S, Se or Te. (Alternatively, see the table x).
 
 
-<table style="width:100%",align="center">
+<table style="width:100%" align="center">
   <tr>
     <th>Site</th>
     <th>Element</th> 
@@ -110,7 +110,7 @@ For each composite, DFT total energies of the relaxed structures were calculated
 To begin our investigation, we used the FM spin configuration which comprise mixing of all the A and B sites shown in Table x with X = Te. We also needed a target (response) variable and decided to use magnetic moment as a means for classification. For our initial model we chose 4 Bohr magnetons (the median of our distribution) as a splitting criterion for training a classification model (see fig x). Note, our 3-D charge densities are handled easily by the python Neural Network packages, keras and tensorflow. 
  
 <p align="center"> 
-<img src="bohr.png">
+<img src="bohr.JPG">
 </p>
 
 <p align="center">Distribution of response variables appears to illustrate mixture of two gaussians. As such, we use the mean, highlighted in green, as the splitting criteria which leads to 37 values below 4 Bohr magnetons and 25 above.  <p align="center">
