@@ -1,4 +1,4 @@
-<b>Using convolutional neural networks to understand magnetism in two-dimensional ferromagnetic structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> </b>
+# Using convolutional neural networks to understand magnetism in two-dimensional ferromagnetic structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub>
 
 ## Introduction
 
@@ -22,6 +22,8 @@ For many years research groups have focused on improving density functional theo
 
 
 ## Background
+
+### Magnetism
 
 Our choice of algorithm and data to address this challenge was governed by our current understanding of magnetism. We know that magnetism in materials arises because of the quantum nature of electrons [9]. Specifically, we know that the net magnetic moment (J) of a single atom is:
 
@@ -52,6 +54,9 @@ Furthermore, they visually illustrate [FIG x] how these interactions could take 
 
 
 These results inspired us to ask the following question: can we find evidence of exchange interactions (patterns) by analyzing the spin density profiles (images) of 2-D materials? One natural approach for this was to use a convolutional neural network (CNN). 
+
+### Convolutional Neural Networks
+
 A Convolutional Neural Network is an ML algorithm which takes images as inputs and then convolves these images with 'filters' to produce outputs which can be pooled/flattened or used to make a decision. An example architecture is highlighted in fig x.
 
 <p align="center"> 
@@ -60,13 +65,12 @@ A Convolutional Neural Network is an ML algorithm which takes images as inputs a
 
 <p align="center">Figx. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activationss. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter) <p align="center">
 
-
-
 CNN’s have been used quite successfully for pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters [CITE]. Given this, we thought CNN’s would be a great way to detect patterns (exchange interactions) in large images (electron density profiles).
 
 
 ## Methodology
 
+### Data 
 We used DFT to build a database of structures based on Cr2Ge2Te6. Our motivation in doing so was to replace the individual sites by different atoms so that we could obtain variations in the magnetic densities and order for training the ML model. We did this by replacing one of two chromium atoms (A sites) in unit cells with a transition metal. We restricted the transition metals to (Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru) in order to comprise most of the first row of TM’s and a few of the second. Substitutions for B were Ge,Ge0.5Si0.5,Ge0.5P0.5,Si and P. X sites were decorated with S, Se or Te. (Alternatively, see the table x).
 
 
@@ -115,18 +119,23 @@ To begin our investigation, we used the FM spin configuration which comprise mix
 
 
 
-
+### Architecture Design
 
 One big challenge with using Convolutional Neural Networks is that they have many parameters and can be quite complex. To tackle this problem in a systematic way we decided to think more closely about what convolutions were doing to our input image and what we were hoping to extract. Here we outline some of our preliminary design decisions:
-1. We wanted to start out with a simple model and then tune parameters accordingly. As such, we decided our model would simply have one convolutional layer, one pooling layer and one flatten/dense layer. The motivation for this is that the simpler the model, the more interpretable it is.
-2. Since we were hoping to find 3 or 4 NN exchange interactions, we designed our first convolutional layer to have 3 filters. We later varied the number of filters to get a sense for the kind of variations in patterns recognized (see results).
-3. A large kernel size of (40X40X40) was initially chosen because this would force the CNN filters to learn larger patterns (something we are looking for). It must be noted that smaller kernels underfit and larger filters overfit and one needs to cross validate to find the right size with the constraint here that they shouldn’t be too small since this could result in a non-interpretable model.
-4. Our model is looking for NN exchange patterns which occur on length scales the order of atomic distances. Therefore, we took our unit cell spin densities and expanded them to supercells so that filters can scan over and detect these ‘long’ range interactions.
-5. Strides for the convolutional layers were varied across experimental runs because we had little prior knowledge for what they should be set at. We do know that small strides mean more information encoded in our layers, but this also means more computation. Accounting for this trade-off we varied these in our trials.
+1. We wanted to start out with a simple model and then tune parameters accordingly. As such, we decided our model would simply have one convolutional layer, one pooling layer and one flatten/dense layer. 
+2. Since we were hoping to find 3 nearest neighbor exchange interactions, we designed our first convolutional layer to have 3 filters. We later varied the number of filters to get a sense for the kind of variations in patterns recognized (see results).
+3. A large kernel size of (40X40X40) was initially chosen because this would force the CNN filters to learn larger atomic-distance patterns. It must be noted that smaller kernels underfit because of significant data compression and larger kernels overfit due to no compression. As such one needs to cross validate to find the right size with the constraint here that they shouldn’t be too small since this could result in a non-interpretable model.
+4. Our model is looking for nearest neighbor exchange patterns which occur on length scales the order of atomic distances. Therefore, we used a 2X2 supercell to create the spin density profiles.Thus, filters could scan over and detect these ‘long’ range interactions.
+5. Strides for the convolutional layers were varied across experimental runs because we had little prior knowledge for what they should be set at. We do know that small strides mean more information encoded in our layers, but this also means more computation. Accounting for this trade-off we tried numerous strides to see whether they would influence performance.
 6. A relu activation unit was used to prevent the zeroing out of filter weights.
 7. A pool size of (2X2X2) was chosen so that additional convolutional layers could be added later since larger pool sizes mean significant shrinkage.
 8. A flatten layer was used with a dense layer of size 2 and a softmax for classification since there are only 2 categories.
-9. These are the output shapes with a convolution layer of (60,60,60), stride of (2,2,2), input size of (120,120,120) and pooling of (2,2,2) printed here for reference. We decided to use SGD since it prevents us from getting stuck in local minima. A learning rate was set and then varied across the trials to determine the best rate in our validation set. The choice of batch size significantly affects our ability to get to the local minima but large batch sizes tend to be memory intensive. Thus, we started off with a batch size of 20 since this system ran in a reasonable time on a GPU and most models converged quite rapidly with this size. Most convolutional nets have a channels parameter which is usually meant to reflect different colors (e.g.  rgb) or different types of the same image. Our spin densities naturally fit into the black and white color scheme since some densities were negative and others were positive. We therefore divided the data accordingly. A train test split of 70-30% was used and 5 Epochs were run.
+9. We decided to use stochastic gradient descent (SGD) since it prevents us from getting stuck in local minima. A learning rate which determines the rate at which we try to find minima was set and then varied across the trials to determine the best rate in our validation set. The choice of batch size (number of datapoints to find an SGD gradient on) significantly affects our ability to get to the local minima but large batch sizes tend to be memory intensive. 
+10. Most convolutional nets have a channels parameter which is usually meant to reflect different colors (e.g.  rgb) or different types of the same image. Our spin densities naturally fit into the black and white color scheme since some densities were negative and others were positive. We therefore divided the data accordingly. A train test split of 70-30% was used and 5 Epochs were run.
+
+### Computation and Memory
+
+
 
 
 ## Results
