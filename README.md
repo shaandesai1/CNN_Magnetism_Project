@@ -3,7 +3,7 @@
 
 ## Introduction
 
-Over the past decade, two-dimensional materials have demonstrated immense potential for creating advances in fundamental research and industrial applications. In particular, experimental and computational studies of the transition-metal based compounds [1,2] both highlight the emergence of numerous magnetic phases in two-dimensional crystals. These findings have sparked significant excitement in materials science for their potential use in data storage and spintronics applications. A notable example of this is Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> which was recently experimentally shown to exhibit ferromagnetism [3]. Despite these experimental observations and our general understanding of how magnetism arises in bulk crystals, we have yet to fully understand the specific mechanisms through which magnetism arises in these two-dimensional (2-D) materials. Developing this understanding could significantly impact (1), our ability to predict the properties of novel materials - new materials which are designed by decorating atomic sites of known 2-D structures with different atoms [fig 1] and (2), our ability to engineer materials for specific device applications. 
+Over the past decade, two-dimensional materials have demonstrated immense potential for creating advances in fundamental research and industrial applications. In particular, experimental and computational studies of the transition-metal based compounds [1,2] both highlight the emergence of numerous magnetic phases in two-dimensional crystals. These findings have sparked significant excitement in materials science for their potential use in data storage and spintronics applications. A notable example of this is Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> which was recently experimentally shown to exhibit ferromagnetism [3]. Despite these experimental observations and our general understanding of how magnetism arises in bulk crystals, we have yet to fully understand the specific mechanisms through which magnetism arises in these two-dimensional (2-D) materials. Developing this understanding could significantly impact (1), our ability to predict the properties of novel materials - new materials which are designed by decorating atomic sites of known 2-D structures with different atoms (see fig. 1) and (2), our ability to engineer materials for specific device applications. 
 
 
 <p align="center"> 
@@ -13,7 +13,7 @@ Over the past decade, two-dimensional materials have demonstrated immense potent
 <p align="center">Figure 1. Monolayer structure of a Transition Metal Dichalcogenide in the 2H phase where yellow spheres represent chalcogens and blakc spheres represent metals. By decorating these lattice sites with different atoms from the periodic table, we can develop a large space of testable '2-D' materials (adapted from Qing Hua Wang et al [4]) </p>
 
 
-For many years research groups have focused on improving density functional theory (DFT) calculations to capture such properties [5,6]. Yet these methods tend to be computationally and financially costly. Machine learning (ML) is rapidly paving the way to accurate property predictions in a much faster and cost-effective manner [7]. In addition, ML tools create avenues through which we can develop a better understanding of the properties themselves. For example, Pilania et.al have shown that machine learning methods can be used to accurately model bandgaps of double perovskites [8]. Furthermore, ML methods have also been shown to capture an understanding of the underlying physics in layers of a Neural Network trained to reproduce DFT results [9,10]. Given this, we decided to build a convolutional neural network architecture to develop a better understanding of magnetism in transition metal trichalcogenides( see fig2). Our preliminary results indicate that our model can capture large patterns linked to fluctuations in spin density across lattice sites. However, the microscopic origins of magnetism in these density profiles have not been identified yet through this approach.
+For many years research groups have focused on improving density functional theory (DFT) calculations to capture such properties [5,6]. Yet these methods tend to be computationally and financially costly. Machine learning (ML) is rapidly paving the way to accurate property predictions in a much faster and cost-effective manner [7]. In addition, ML tools create avenues through which we can develop a better understanding of the properties themselves. For example, Pilania et.al have shown that machine learning methods can be used to accurately model bandgaps of double perovskites [8]. Furthermore, ML methods have also been shown to capture an understanding of the underlying physics in layers of a Neural Network trained to reproduce DFT results [9,10]. Given this, we decided to build a convolutional neural network architecture to develop a better understanding of magnetism in transition metal trichalcogenides(see fig. 2). Our preliminary results indicate that our model can capture large patterns linked to fluctuations in spin density across lattice sites. However, the microscopic origins of magnetism in these density profiles have not been identified yet through this approach.
 
 <p align="center"> 
 <img src="tmtc.png">
@@ -26,7 +26,7 @@ For many years research groups have focused on improving density functional theo
 
 ### Magnetism
 
-Our choice of algorithm and data to address this challenge was governed by our current understanding of magnetism. We know that magnetism in materials arises because of the quantum nature of electrons [9]. Specifically, we know that the net magnetic moment (J) of a single atom is:
+Our choice of algorithm and data to address this challenge was governed by our current understanding of magnetism. We know that magnetism in materials arises because of the quantum nature of electrons [11]. Specifically, we know that the net magnetic moment (J) of a single atom is:
 
 <p align="center"> 
 J=L±S
@@ -39,34 +39,34 @@ Where L is the orbital angular momentum of the electron around the nucleus and S
 </p>
 
 
-In which σ<sub>i</sub> is the spin of one of the atomic electrons and J<sub>1</sub> is the interaction term that tells us how the spins of nearest neighbor atoms interact. In general, additional interactions between other atomic sites are neglected because the J<sub>1</sub> interaction is dominant in bulk crystals. This was also assumed to be the case in 2-D materials until Sivadas et al  showed that by adding J<sub>2</sub> and J<sub>3</sub> interaction terms into the Hamiltonian for 2-D materials (second and third nearest neighbor interactions), they were able to obtain results that agreed better with experiment [10]. Their resulting Heisenberg model is:
+In which σ<sub>i</sub> is the spin of one of the atomic electrons and J<sub>1</sub> is the interaction term that tells us how the spins of nearest neighbor atoms interact. In general, additional interactions between other atomic sites are neglected because the J<sub>1</sub> interaction is dominant in bulk crystals. This was also assumed to be the case in 2-D materials until Sivadas et al  showed that by adding J<sub>2</sub> and J<sub>3</sub> interaction terms into the Hamiltonian for 2-D materials (second and third nearest neighbor interactions), they were able to obtain results that agreed better with experiment [12]. Their resulting Heisenberg model is:
 
 <p align="center"> 
 <img src="ham2.JPG">
 </p>
 
-Furthermore, they visually illustrate [FIG x] how these interactions could take place.
+Furthermore, they visually illustrate [FIG 3] how these interactions could take place.
 
 <p align="center"> 
 <img src="sivadas.png">
 </p>
 
-<p align="center">Figure x.3 pathways presented for Nearest Neighbor exchange. a) represents the second nearest neighbor, b) the third and c) the first (direct exchange-vertical and superexchange- 87.9 angle). </p>
+<p align="center">Figure 3. 3 pathways presented for Nearest Neighbor exchange. a) represents the second nearest neighbor, b) the third and c) the first (direct exchange-vertical and superexchange- 87.9 angle). Adapted from Sivadas et al [12] </p>
 
 
 These results inspired us to ask the following question: can we find evidence of exchange interactions (patterns) by analyzing the spin density profiles (images) of 2-D materials? One natural approach for this was to use a convolutional neural network (CNN). 
 
 ### Convolutional Neural Networks
 
-A Convolutional Neural Network is an ML algorithm which takes images as inputs and then convolves these images with 'filters' to produce outputs which can be pooled/flattened or used to make a decision. An example architecture is highlighted in fig x.
+A Convolutional Neural Network is an ML algorithm which takes images as inputs and then convolves these images with 'filters' to produce outputs which can be pooled/flattened or used to make a decision. An example architecture is highlighted in fig. 4.
 
 <p align="center"> 
 <img src="cnnarch.JPG">
 </p>
 
-<p align="center">Figx. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activationss. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter) </p>
+<p align="center">Figure 4. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activationss. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter). Adapted from Stanford CS231n [13] </p>
 
-CNN’s have been used quite successfully for pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters [CITE]. Given this, we thought CNN’s would be a great way to detect patterns (exchange interactions) in large images (electron density profiles).
+CNN’s have been used quite successfully for pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters [14]. Given this, we thought CNN’s would be a great way to detect patterns (exchange interactions) in large images (electron density profiles).
 
 
 ## Methodology
@@ -77,29 +77,31 @@ We used DFT to build a database of structures based on Cr<sub>2</sub>Ge<sub>2</s
 <p align="center">
 	<img src="table1.JPG">
 </p>
+<p align="center">
+	Table 1. List of elements used at each of the TMTC sites.
+</p>
 
-For each composite, DFT total energies of the relaxed structures were calculated for several initial spin configurations: non-spin polarized, ferromagnetic and Neel antiferromagnetic. The resultant spin density profiles (60X60X120 images [FIG x]) contain information relevent to magnetism and thus served as input to our ML models. 
+
+
+For each composite, DFT total energies of the relaxed structures were calculated for several initial spin configurations: non-spin polarized, ferromagnetic and Neel antiferromagnetic. The resultant spin density profiles (60X60X120 images (see fig. 5) contain information relevent to magnetism and thus served as input to our ML models. 
 
 <p align="center"> 
 <img src="lattice.JPG">
 </p>
 
-<p align="center">Figx. Left: unit cell of Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> (in the x-y plane) with spin density isosurfaces overlaid at charge values of 7.3e-5. The yellow surfaces are positive densities and the blue are negative. Blue spheres represent Chromium sites, purple spheres represent Germanium and yellow sphere represent Tellerium. Right: average projection of charge densities in the x-y plane.  </p>
+<p align="center">Figure 5. Left: unit cell of Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> (in the x-y plane) with spin density isosurfaces overlaid at charge values of 7.3e-5. The yellow surfaces are positive densities and the blue are negative. Blue spheres represent Chromium sites, purple spheres represent Germanium and yellow sphere represent Tellerium. Right: average projection of charge densities in the x-y plane.  </p>
 
 
 
 
 
-To begin our investigation, we used the FM spin configuration which comprise mixing of all the A and B sites shown in Table x with X = Te. We also needed a target (response) variable and decided to use magnetic moment as a means for classification. For our initial model we chose 4 Bohr magnetons (the median of our distribution) as a splitting criterion for training a classification model (see fig x). Note, our 3-D charge densities are handled easily by the python Neural Network packages, keras and tensorflow. 
+To begin our investigation, we used the FM spin configuration which comprise mixing of all the A and B sites shown in Table 1 with X = Te. We also needed a target (response) variable and decided to use magnetic moment as a means for classification. For our initial model we chose 4 Bohr magnetons (the mean of our distribution) as a splitting criterion for training a classification model (see fig 6). Note, our 3-D charge densities are handled easily by the python Neural Network packages, keras and tensorflow. 
  
 <p align="center"> 
 <img src="bohr.JPG">
 </p>
 
-<p align="center">Distribution of response variables appears to illustrate mixture of two gaussians. As such, we use the mean, highlighted in green, as the splitting criteria which leads to 37 values below 4 Bohr magnetons and 25 above.  </p>
-
-
-
+<p align="center"> Figure 6. Distribution of response variables appears to illustrate mixture of two gaussians. As such, we use the mean, highlighted in green, as the splitting criteria which leads to 37 values below 4 Bohr magnetons and 25 above.  </p>
 
 
 ### Architecture Design
@@ -134,12 +136,12 @@ With the given parameters, we swept over multiple filters and filter sizes to se
 <img src="lr1.JPG">
 </p>
 <p align="center"> 
-<img src="lr2.png">
+<img src="lr2.JPG">
 </p>
 
 
 <p align="center"> 
-Fig X. The figures illustrate the first filter averaged along the x dimension from three different models in which the left most one had a learning rate of 0.01, the middle had 1 and the right one had 100. The table shows training and validation accuracies for the first and last epoch for each model.
+Figure 7. The figures illustrate the first filter averaged along the x dimension from three different models in which the left most one had a learning rate of 0.01, the middle had 1 and the right one had 100. The table shows training and validation accuracies for the first and last epoch for each model.
 </p>
 
 Given that a high learning rate led to good accuracies and an interpretable filter, we ran numerous test which we hihglight below.
@@ -153,7 +155,7 @@ Given that a high learning rate led to good accuracies and an interpretable filt
 </p>
 
 <p align="center"> 
-Fig X. 
+Figure 8. 
 </p>
 
 
@@ -166,7 +168,7 @@ Fig X.
 <img src="poolno1.JPG">
 </p>
 <p align="center"> 
-Fig X. 
+Figure 9. 
 </p>
 
 ### Varying learning rate
@@ -178,7 +180,7 @@ Fig X.
 <img src="lrnew1.JPG">
 </p>
 <p align="center"> 
-Fig X. 
+Figure 10.
 </p>
 
 
@@ -193,26 +195,35 @@ From these results we can see that 3 filters with a pool size of 2 and learning 
 Initial effors to extract patterns from spin density profiles of 2-D FM materials show great promise. Patterns learned from smaller filters appear to describe atomic orbitals well. Closer investigation into the framework may lead to a deeper understanding of the microscopic origins of magnetism. 
 
 ## References
-https://www.earth.ox.ac.uk/~conallm/Phys-princip.pps
 [1] M.A. McGuire, H. Dixit, V.R. Cooper, and B. C. Sales, Chem.Mater. 27, 612 (2015)
 
 [2] Y. Takano, N. Arai, A. Arai, Y. Takahashi, K. Takase, and K. Sekizawa, J. Magn. Magn. Mater. 272, E593 (2004)
 
 [3] Gong. Cheng, Li. Lin, Li. Zhenglu et al, Nature 546, 265-269 (2017)
 
-[4] Shi. Xinying, Huang. Zhongjia, Huttula, Marko, Li. Taohai, Li. Suya, Wang. Xiao, Luo. Youhua, Zhang. Meng, Cao. Wei, MDPI. Crystals 8(1), 24 (2018)
+[4] Q.H. Wang et al. Nature-Nanotechnology 7, 699 (2012)
 
-[5] Li. Jiao, Fan. Xinyu, Wei. Yanpei, and Chen. Gang. Nature Sci. Rep. 6, 31840 (2016)
+[5] Shi. Xinying, Huang. Zhongjia, Huttula, Marko, Li. Taohai, Li. Suya, Wang. Xiao, Luo. Youhua, Zhang. Meng, Cao. Wei, MDPI. Crystals 8(1), 24 (2018)
 
-[6] Hegde. Ganesh, and B. R. Chris. Nature Sci. Rep. 7, 42669 (2017)
+[6] Li. Jiao, Fan. Xinyu, Wei. Yanpei, and Chen. Gang. Nature Sci. Rep. 6, 31840 (2016)
 
-[7] Pilania. G, A. Mannodi-Kanakkithodi, B.P. Uberuagu, R. Ramprasad, J.E.Gubernatis, and T. Lookman. Nature Sci.Rep. 6, 19375 (2016)
+[7] Hegde. Ganesh, and B. R. Chris. Nature Sci. Rep. 7, 42669 (2017)
 
-[8] E.D. Cubuk, M.D. Brad, O. Berk, W. Amos, E. Kaxiras. J. Chem. Phys. 147, 024104 (2017)
+[8] Pilania. G, A. Mannodi-Kanakkithodi, B.P. Uberuagu, R. Ramprasad, J.E.Gubernatis, and T. Lookman. Nature Sci.Rep. 6, 19375 (2016)
 
-[9] J. M. D. Coey. Cambridge Press. 9780521816144 (2009)
+[9] E.D. Cubuk, M.D. Brad, O. Berk, W. Amos, E. Kaxiras. J. Chem. Phys. 147, 024104 (2017)
 
-[10] N. Sivadas, M.W. Daniels, R.H.Swendsen,S.Okamoto, and D.Xiao. J. Phys. Rev. B. 91, 235425 (2015)
+[10] T. Ueno, T.D. Rhone, Z. Hou, and K. Tsuda. DOI: 10.1016/j.md.2016.04.001 (2016)
+
+[11] J. M. D. Coey. Cambridge Press. 9780521816144 (2009)
+
+[12] N. Sivadas, M.W. Daniels, R.H.Swendsen,S.Okamoto, and D.Xiao. J. Phys. Rev. B. 91, 235425 (2015)
+
+[13] http://cs231n.github.io/convolutional-networks/
+
+[14] M. Delakis and C. Garcia. http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.6.697&rep=rep1&type=pdf
+
+
 
 
 
