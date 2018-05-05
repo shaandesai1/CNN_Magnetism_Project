@@ -71,25 +71,37 @@ CNN’s have been used quite successfully for pattern recognition in images. For
 
 ## Methodology
 
-We used DFT to build a database of structures based on Cr2Ge2Te6. Our motivation in doing so was to replace the individual sites by different, relatively close, atoms so that we could obtain minor variations in the magnetic densities and states for training. We did this by replacing one of two chromium atoms (A sites) in unit cells with a transition metal. We restricted the transition metals to (Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru) in order to comprise most of the first row of TM’s and a few of the second. Substitutions for B were Ge,Ge0.5Si0.5,Ge0.5P0.5,Si and P. X sites were decorated with S, Se or Te. (Alternatively, see the table x).
-
-A site candidates	B site candidates	X site candidates
-Ti	Ge	S
-V	Ge0.5Si0.5	Se
-Cr	Ge0.5P0.5	Te
-Mn	Si	
-Fe	P	
-Co		
-Ni		
-Cu		
-Y		
-Nb		
-Ru		
+We used DFT to build a database of structures based on Cr2Ge2Te6. Our motivation in doing so was to replace the individual sites by different atoms so that we could obtain variations in the magnetic densities and order for training the ML model. We did this by replacing one of two chromium atoms (A sites) in unit cells with a transition metal. We restricted the transition metals to (Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru) in order to comprise most of the first row of TM’s and a few of the second. Substitutions for B were Ge,Ge0.5Si0.5,Ge0.5P0.5,Si and P. X sites were decorated with S, Se or Te. (Alternatively, see the table x).
 
 
+<table style="width:100%">
+  <tr>
+    <th>Site</th>
+    <th>Element</th> 
+  </tr>
+  <tr>
+    <td>A</td>
+    <td>Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru</td> 
+  </tr>
+  <tr>
+    <td>B</td>
+    <td>Ge,Ge<sub>0.5</sub>Si<sub>0.5</sub>,Ge<sub>0.5</sub>P<sub>0.5</sub>,Si,P</td> 
+  </tr>
+  <tr>
+    <td>X</td>
+    <td>S,Se,Te</td> 
+  </tr>
+</table>	
 
-For each composite, DFT total energies of the relaxed structures were calculated for initial several spin configurations: non-spin polarized, ferromagnetic and Neel antiferromagnetic. The resultant spin density profiles (60X60X120 images [FIG x]) are known to capture the underlying physics of magnetism, discussed earlier, and thus served as input for our ML models. 
 
+
+For each composite, DFT total energies of the relaxed structures were calculated for several initial spin configurations: non-spin polarized, ferromagnetic and Neel antiferromagnetic. The resultant spin density profiles (60X60X120 images [FIG x]) contain information relevent to magnetism and thus served as input to our ML models. 
+
+<p align="center"> 
+<img src="spindensity.jpg">
+</p>
+
+<p align="center">Figx. Plots of the spin density isosurfaces of TMTMC's. <p align="center">
 
 
 
