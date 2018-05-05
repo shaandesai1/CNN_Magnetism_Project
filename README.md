@@ -23,6 +23,177 @@ For many years research groups have focused on improving density functional theo
 <p align="center">Figure 2. ABX<sub>3</sub> structure of a transition metal trichalcogenide. 'A' sites represent Transition Metals, 'B' sites typically represent group 4 and 5 atoms and 'X' sites represent the chalcogens (group 6). <p align="center">
 
 
+## Background
+
+Our choice of algorithm and data to address this challenge was governed by our current understanding of magnetism, and this is particularly important in physics because we need to design interpretable models. We know that magnetism in materials arises because of the quantum nature of electrons [9]. Specifically, we know that the net magnetic moment (J) of a single atom is:
+
+<p align="center"> 
+J=L±S
+</p>
+
+Where L is the orbital angular momentum of the electron around the nucleus and S is the intrinsic spin angular momentum of the electron. When many atoms are placed next to each other in a crystalline structure, it is possible for electrons in the atomic orbitals to overlap and adhere to the Pauli exclusion principle (which states that two or more identical fermions cannot occupy the same quantum state within a quantum system). As a consequence, the spins can order in a particular manner, for instance they can align in either parallel or anti-parallel configurations. The Heisenberg model is a statistical mechanics model used to study these interactions. It assumes that the dominant coupling between two dipoles may cause nearest-neighbors to have lowest energy when they are aligned. This results in a Hamiltonian on a honeycomb lattice where:
+H= J_1 ∑_(<i,j>)▒〖σ_i σ_j 〗
+In which σ_i is the spin of one of the atomic electrons and J1 is the interaction term that tells us how the spins of nearest neighbor atoms interact. For a long time, it was believed that this law would hold in 2D materials. However, Sivadas et al recently showed that by adding J2 and J3 interaction terms (second and third nearest neighbor interactions), they were able to obtain results that aligned much more closely with experiment [10]. The resulting equation is:
+H= J_1 ∑_(<i,j>)▒〖σ_i σ_j 〗+ J_2 ∑_(<i,j>)▒〖σ_i σ_j 〗+ J_3 ∑_(<i,j>)▒〖σ_i σ_j 〗
+Furthermore, they visually illustrate [FIG x] potential pathways for how these exchange interactions could be taking place.
+ 
+
+
+
+ These results inspired us to ask the question as to whether we could visually capture these exchange interactions (patterns) from spin density profiles (images) of 2-D materials. One natural choice for this was a convolutional neural network. CNN’s have been used quite successfully in pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters. Given this, we thought CNN’s would be a great way to detect patterns (exchange interactions) in large images (electron density profiles).
+
+
+Methodology
+We used DFT to build a database of structures based on Cr2Ge2Te6. Our motivation in doing so was to replace the individual sites by different, relatively close, atoms so that we could obtain minor variations in the magnetic densities and states for training. We did this by replacing one of two chromium atoms (A sites) in unit cells with a transition metal. We restricted the transition metals to (Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru) in order to comprise most of the first row of TM’s and a few of the second. Substitutions for B were Ge,Ge0.5Si0.5,Ge0.5P0.5,Si and P. X sites were decorated with S, Se or Te. (Alternatively, see the table x).
+
+A site candidates	B site candidates	X site candidates
+Ti	Ge	S
+V	Ge0.5Si0.5	Se
+Cr	Ge0.5P0.5	Te
+Mn	Si	
+Fe	P	
+Co		
+Ni		
+Cu		
+Y		
+Nb		
+Ru		
+
+
+
+For each composite, DFT total energies of the relaxed structures were calculated for initial several spin configurations: non-spin polarized, ferromagnetic and Neel antiferromagnetic. The resultant spin density profiles (60X60X120 images [FIG x]) are known to capture the underlying physics of magnetism, discussed earlier, and thus served as input for our ML models. 
+
+
+
+
+
+
+To begin our investigation, we used the FM spin configuration from which we had 64 spin densities. We also needed a target (response) variable and decided to use magnetic moment as a means for classification. For our initial model we chose 4 Bohr magnetons (the median of our distributions) as a splitting criterion for training a classification model (see fig x). Note, our 3-D charge densities are handled easily by the python Neural Network packages, keras and tensorflow. 
+ 
+
+
+
+One big challenge with using Convolutional Neural Networks is that they have many parameters and can be as complex or as simple as we would like them to be. To tackle this problem in a systematic way we decided to think more closely about what convolutions were doing to our input image and what we were hoping to extract. Here we outline some of our preliminary design decisions:
+	We wanted to start out with a simple model and then tune parameters accordingly. As such, we decided our model would simply have one convolutional layer, one pooling layer and one flatten/dense layer. The motivation for this is that the simpler the model, the more interpretable it is.
+	Our model is looking for NN exchange patterns which occur on length scales the order of atomic distances. Therefore, we took our unit cell spin densities and expanded them to supercells so that filters can scan over and detect these ‘long’ range interactions.
+	Since we were hoping to find 3 or 4 NN exchange interactions, we designed our first convolutional layer to have 3 filters. We later varied the number of filters to get a sense for the kind of variations in patterns recognized (see results).
+	A large kernel size of (40X40X40) was initially chosen because this would force the CNN filters to learn larger patterns (something we are looking for). It must be noted that smaller kernels underfit and larger filters overfit and one needs to cross validate to find the right size with the constraint here that they shouldn’t be too small since this could result in a non-interpretable model.
+	A relu activation unit was used to prevent the zeroing out of filter weights.
+	A pool size of (2X2X2) was chosen so that additional convolutional layers could be added later since larger pool sizes mean significant shrinkage.
+	A flatten layer was used with a dense layer of size 2 and a softmax for classification since there are only 2 categories.
+	Strides for the convolutional layers were varied across experimental runs because we had little prior knowledge for what they should be set at. We do know that small strides mean more information encoded in our layers, but this also means more computation. Accounting for this trade-off we varied these in our trials.
+
+
+
+
+
+
+
+
+
+
+	These are the output shapes with a convolution layer of (60,60,60), stride of (2,2,2), input size of (120,120,120) and pooling of (2,2,2) printed here for reference.
+	We decided to use SGD since it prevents us from getting stuck in local minima. A learning rate was set and then varied across the trials to determine the best rate in our validation set.
+	The choice of batch size significantly affects our ability to get to the local minima but large batch sizes tend to be memory intensive. Thus, we started off with a batch size of 20 since this system ran in a reasonable time on a GPU and most models converged quite rapidly with this size.
+	Most convolutional nets have a channels parameter which is usually meant to reflect different colors (e.g.  rgb) or different types of the same image. Our spin densities naturally fit into the black and white color scheme since some densities were negative and others were positive. We therefore divided the data accordingly.
+	A train test split of 70-30% was used.
+	5 Epochs were run.
+Results
+Since these are only our preliminary results, we segment them according to the various parameters we swept over. To do this we needed to define a base model. Using the parameters discussed previously we use the following as our base model:
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+Varying number of filters
+Accuracy/Epoch	Number of Filters
+	2	3	4
+Training/ 1	0.5100	0.5581	0.4419
+Validation/ 1	0.5789	0.5789	0.4211
+Training/ 5	.6047	.6047	.6047
+Validation/ 5	.5789	.5789	.5789
+
+Firstly, and quite evidently, the filters do not resemble any immediate patterns and changing the number of filters doesn’t seem to improve this. In addition, increasing/decreasing the number of filters from 3 appears to hurt the training accuracy and also hurts the validation accuracy for the first epoch.  
+Varying pooling size
+
+Accuracy/Epoch	Pool Size
+	1	2	3
+Training/ 1	0.3488	0.5581	.5581
+Validation/ 1	.4211	0.5789	.4211
+Training/ 5	.6047	.6047	.6047
+Validation/ 5	.5789	.5789	.4211
+
+Varying learning rate
+
+
+Accuracy/Epoch	Learning Rate
+	0.01	1	100
+Training/ 1	0.4186	0.5581	0.6047
+Validation/ 1	0.5789	0.5789	0.5789
+Training/ 5	0.6047	0.6047	0.6047
+Validation/ 5	0.5789	0.5789	0.5789
+
+
+Learning rate indeed adds a new dimension to this entire process. Firstly, it appears to reach very high accuracies much faster (e.g. in the first epoch) which indicates that the learning rates we were using in the base model weren’t ideal. Secondly, although not shown, the higher learning rates tended to have larger loss values for both training and validation sets. This needs further investigation …
+
+We then decided to re-run this sequence of experiments with a new base model that had a learning rate of 100 instead of 1.
+Varying # of kernels with larger sgd base of 100
+
+
+Accuracy/Epoch	Number of Filters
+	2	3	4
+Training/ 1	0.5349	0.6047	0.5349
+Validation/ 1	0.5789	0.5789	0.4211
+Training/ 5	0.6047	0.6047	0.3953
+Validation/ 5	0.5789	0.5789	0.4211
+
+Varying pool size with larger sgd base of 100
+
+
+Accuracy/Epoch	Pool Size
+	1	2	3
+Training/ 1	0.5349	0.6047	0.6977
+Validation/ 1	0.5789	0.5789	0.5789
+Training/ 5	0.6047	0.6047	0.6047
+Validation/ 5	0.5789	0.5789	0.5789
+
+Varying learning rate with larger sgd base of 100
+
+
+Accuracy/Epoch	SGD LR
+	1	100	10000
+Training/ 1	0.5814	0.6047	0.6047
+Validation/ 1	0.5789	0.5789	0.5789
+Training/ 5	0.6047	0.6047	0.6047
+Validation/ 5	0.5789	0.5789	0.5789
+
+From these results we can see that 3 filters with a pool size of 2 and learning rate of 100 do a decent job in terms of validation accuracy within the first epoch. Furthermore, the filters in this configuration (all the middle figures) illustrate a recognizable pattern in the top right corner. However, further tuning the kernel size and other parameters could significantly influence the resultant image as we have seen in the figures above. The sensitivity to these changes might stem from the little data we have and it will be useful to expand our training from the 66 datapoints to a larger set. In addition, it might be crucial to rethink our binary response variable. Perhaps we should make this a multi-class classification problem.
+
+
+Conclusion
+While ML methods have rapidly gained attention over the past few years as a novel set of tools to solve high dimensional problems, applying them to specific problems involves a significant amount of care and attention to detail. As we have shown, attempting to extract information from charge density profiles using convolutional nets involves tuning numerous parameters and checking how performance and filters change. In doing so we found a high level of sensitivity in response to changes in parameters but we were also able to demonstrate that filters can extract some macro level information from the charge profiles. This only marks one part of the challenge, the other being one of computational/memory cost. As the problem got bigger we needed to use high performance computing (e.g. GPUs) and while this did speed up our calculations, increasing certain parameters such as the number of convolutional layers dramatically slowed down computations and added memory cost. With that said, there does appear to be some underlying physics captured in the filters, it simply requires the right amount of tuning and more data to ensure predictable results.
+Sources
+https://www.earth.ox.ac.uk/~conallm/Phys-princip.pps
+[1] M.A. McGuire, H. Dixit, V.R. Cooper, and B. C. Sales, Chem.Mater. 27, 612 (2015)
+[2] Y. Takano, N. Arai, A. Arai, Y. Takahashi, K. Takase, and K. Sekizawa, J. Magn. Magn. Mater. 272, E593 (2004)
+[3] Gong. Cheng, Li. Lin, Li. Zhenglu et al, Nature 546, 265-269 (2017)
+[4] Shi. Xinying, Huang. Zhongjia, Huttula, Marko, Li. Taohai, Li. Suya, Wang. Xiao, Luo. Youhua, Zhang. Meng, Cao. Wei, MDPI. Crystals 8(1), 24 (2018)
+[5] Li. Jiao, Fan. Xinyu, Wei. Yanpei, and Chen. Gang. Nature Sci. Rep. 6, 31840 (2016)
+[6] Hegde. Ganesh, and B. R. Chris. Nature Sci. Rep. 7, 42669 (2017)
+[7] Pilania. G, A. Mannodi-Kanakkithodi, B.P. Uberuagu, R. Ramprasad, J.E.Gubernatis, and T. Lookman. Nature Sci.Rep. 6, 19375 (2016)
+[8] E.D. Cubuk, M.D. Brad, O. Berk, W. Amos, E. Kaxiras. J. Chem. Phys. 147, 024104 (2017)
+[9] J. M. D. Coey. Cambridge Press. 9780521816144 (2009)
+[10] N. Sivadas, M.W. Daniels, R.H.Swendsen,S.Okamoto, and D.Xiao. J. Phys. Rev. B. 91, 235425 (2015)
 
 
 
