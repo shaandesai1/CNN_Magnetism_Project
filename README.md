@@ -79,13 +79,6 @@ We used DFT to build a database of structures based on Cr<sub>2</sub>Ge<sub>2</s
 | A      | Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru                                           |
 | B      | Ge,Ge<sub>0.5</sub>Si<sub>0.5</sub>,Ge<sub>0.5</sub>P<sub>0.5</sub>,Si,P |
 | X      | S,Se,Te                                                                  |
-
-
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
  
 For each composite, DFT total energies of the relaxed structures were calculated for several initial spin configurations: non-spin polarized, ferromagnetic and Neel antiferromagnetic. The resultant spin density profiles (60X60X120 images [FIG x]) contain information relevent to magnetism and thus served as input to our ML models. 
 
@@ -133,53 +126,30 @@ Convolutional Networks require significant computation and memory to run. While 
 
 Since these are only our preliminary results, we segment them according to the various parameters we swept over. To do this we needed to define a base model. Using the parameters discussed previously we use the following as our base model:
 
+<p align="center"> 
+<img src="arch.JPG">
+</p>
+
+With the given parameters, we swept over multiple filters and filter sizes to search for a model with a high validation accuracy and features that showed patterns. We realized that the most interpretable features were extractable at larger learning rates and we can see this here:
+
+<p align="center"> 
+<img src="lr1.JPG">
+</p>
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
 
 
+<p align="center"> 
+Fig X. The figures illustrate the first filter averaged along the x dimension from three different models in which the left most one had a learning rate of 0.01, the middle had 1 and the right one had 100. The table shows training and validation accuracies for the first and last epoch for each model.
+</p>
 
+Given that a high learning rate led to good accuracies and an interpretable filter, we ran numerous test which we hihglight below.
 
-
- 
-
-
-
-
-
-
-
-
-Varying number of filters
-Accuracy/Epoch	Number of Filters
-	2	3	4
-Training/ 1	0.5100	0.5581	0.4419
-Validation/ 1	0.5789	0.5789	0.4211
-Training/ 5	.6047	.6047	.6047
-Validation/ 5	.5789	.5789	.5789
-
-Firstly, and quite evidently, the filters do not resemble any immediate patterns and changing the number of filters doesn’t seem to improve this. In addition, increasing/decreasing the number of filters from 3 appears to hurt the training accuracy and also hurts the validation accuracy for the first epoch.  
-Varying pooling size
-
-Accuracy/Epoch	Pool Size
-	1	2	3
-Training/ 1	0.3488	0.5581	.5581
-Validation/ 1	.4211	0.5789	.4211
-Training/ 5	.6047	.6047	.6047
-Validation/ 5	.5789	.5789	.4211
-
-Varying learning rate
-
-
-Accuracy/Epoch	Learning Rate
-	0.01	1	100
-Training/ 1	0.4186	0.5581	0.6047
-Validation/ 1	0.5789	0.5789	0.5789
-Training/ 5	0.6047	0.6047	0.6047
-Validation/ 5	0.5789	0.5789	0.5789
-
-
-Learning rate indeed adds a new dimension to this entire process. Firstly, it appears to reach very high accuracies much faster (e.g. in the first epoch) which indicates that the learning rates we were using in the base model weren’t ideal. Secondly, although not shown, the higher learning rates tended to have larger loss values for both training and validation sets. This needs further investigation …
-
-We then decided to re-run this sequence of experiments with a new base model that had a learning rate of 100 instead of 1.
-Varying # of kernels with larger sgd base of 100
+### Varying # of kernels
 
 
 Accuracy/Epoch	Number of Filters
@@ -189,7 +159,7 @@ Validation/ 1	0.5789	0.5789	0.4211
 Training/ 5	0.6047	0.6047	0.3953
 Validation/ 5	0.5789	0.5789	0.4211
 
-Varying pool size with larger sgd base of 100
+### Varying pool size
 
 
 Accuracy/Epoch	Pool Size
@@ -199,7 +169,7 @@ Validation/ 1	0.5789	0.5789	0.5789
 Training/ 5	0.6047	0.6047	0.6047
 Validation/ 5	0.5789	0.5789	0.5789
 
-Varying learning rate with larger sgd base of 100
+### Varying learning rate 
 
 
 Accuracy/Epoch	SGD LR
@@ -212,9 +182,16 @@ Validation/ 5	0.5789	0.5789	0.5789
 From these results we can see that 3 filters with a pool size of 2 and learning rate of 100 do a decent job in terms of validation accuracy within the first epoch. Furthermore, the filters in this configuration (all the middle figures) illustrate a recognizable pattern in the top right corner. However, further tuning the kernel size and other parameters could significantly influence the resultant image as we have seen in the figures above. The sensitivity to these changes might stem from the little data we have and it will be useful to expand our training from the 66 datapoints to a larger set. In addition, it might be crucial to rethink our binary response variable. Perhaps we should make this a multi-class classification problem.
 
 
-Conclusion
+## Future Investigation
+
+
+## Conclusion
+
 While ML methods have rapidly gained attention over the past few years as a novel set of tools to solve high dimensional problems, applying them to specific problems involves a significant amount of care and attention to detail. As we have shown, attempting to extract information from charge density profiles using convolutional nets involves tuning numerous parameters and checking how performance and filters change. In doing so we found a high level of sensitivity in response to changes in parameters but we were also able to demonstrate that filters can extract some macro level information from the charge profiles. This only marks one part of the challenge, the other being one of computational/memory cost. As the problem got bigger we needed to use high performance computing (e.g. GPUs) and while this did speed up our calculations, increasing certain parameters such as the number of convolutional layers dramatically slowed down computations and added memory cost. With that said, there does appear to be some underlying physics captured in the filters, it simply requires the right amount of tuning and more data to ensure predictable results.
-Sources
+
+
+
+## References
 https://www.earth.ox.ac.uk/~conallm/Phys-princip.pps
 [1] M.A. McGuire, H. Dixit, V.R. Cooper, and B. C. Sales, Chem.Mater. 27, 612 (2015)
 [2] Y. Takano, N. Arai, A. Arai, Y. Takahashi, K. Takase, and K. Sekizawa, J. Magn. Magn. Mater. 272, E593 (2004)
