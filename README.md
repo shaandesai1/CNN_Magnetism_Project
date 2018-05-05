@@ -15,7 +15,7 @@ Over the past decade, two-dimensional materials have demonstrated immense potent
 For many years research groups have focused on improving density functional theory (DFT) calculations to capture such properties [5,6]. Yet these methods tend to be computationally and financially costly. Machine learning (ML) is rapidly paving the way to accurate property predictions in a much faster and cost-effective manner [7]. In addition, ML tools create avenues through which we can develop a better understanding of the properties themselves. For example, Pilania et.al have shown that machine learning methods can be used to accurately model bandgaps of double perovskites [8]. Furthermore, ML methods have also been shown to capture an understanding of the underlying physics in layers of a Neural Network trained to reproduce DFT results [9,10]. Given this, we decided to build a convolutional neural network architecture to develop a better understanding of magnetism in transition metal trichalcogenides [fig x]. Our preliminary results indicate that our model can capture large patterns linked to fluctuations in spin density across lattice sites. However, the microscopic origins of magnetism in these density profiles have not been identified yet through this approach.
 
 <p align="center"> 
-<img src="fig2.png">
+<img src="tmtc.png">
 </p>
 
 <p align="center">Figure 2. ABX<sub>3</sub> structure of a transition metal trichalcogenide. 'A' sites represent Transition Metals, 'B' sites typically represent group 4 and 5 atoms and 'X' sites represent the chalcogens (group 6). <p align="center">
