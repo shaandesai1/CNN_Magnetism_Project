@@ -1,7 +1,3 @@
-# CNN_299R
-
-<b>CNN Magnetism Project for AC299R - Shaan Desai</b>
-
 <b>Using convolutional neural networks to understand magnetism in two-dimensional ferromagnetic structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> </b>
 
 ## Introduction
@@ -52,7 +48,7 @@ Furthermore, they visually illustrate [FIG x] how these interactions could take 
 <img src="sivadas.png">
 </p>
 
-<p align="center">Figure x. ABX<sub>3</sub> structure of a transition metal trichalcogenide. 'A' sites represent Transition Metals, 'B' sites typically represent group 4 and 5 atoms and 'X' sites represent the chalcogens (group 6). <p align="center">
+<p align="center">Figure x.3 pathways presented for Nearest Neighbor exchange. a) represents the second nearest neighbor, b) the third and c) the first (direct exchange-vertical and superexchange- 87.9 angle). <p align="center">
 
 
 These results inspired us to ask the following question: can we find evidence of exchange interactions (patterns) by analyzing the spin density profiles (images) of 2-D materials? One natural approach for this was to use a convolutional neural network (CNN). 
@@ -74,7 +70,7 @@ CNN’s have been used quite successfully for pattern recognition in images. For
 We used DFT to build a database of structures based on Cr2Ge2Te6. Our motivation in doing so was to replace the individual sites by different atoms so that we could obtain variations in the magnetic densities and order for training the ML model. We did this by replacing one of two chromium atoms (A sites) in unit cells with a transition metal. We restricted the transition metals to (Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru) in order to comprise most of the first row of TM’s and a few of the second. Substitutions for B were Ge,Ge0.5Si0.5,Ge0.5P0.5,Si and P. X sites were decorated with S, Se or Te. (Alternatively, see the table x).
 
 
-<table style="width:100%">
+<table style="width:100%",align="center">
   <tr>
     <th>Site</th>
     <th>Element</th> 
