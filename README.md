@@ -184,11 +184,34 @@ Figure 10.
 </p>
 
 
-From these results we can see that 3 filters with a pool size of 2 and learning rate of 100 do a decent job in terms of validation accuracy within the first epoch. Furthermore, the filters in this configuration (all the middle figures) illustrate a recognizable pattern in the top right corner. However, further tuning the kernel size and other parameters could significantly influence the resultant image as we have seen in the figures above. The sensitivity to these changes might stem from the little data we have and it will be useful to expand our training from the 66 datapoints to a larger set. In addition, it might be crucial to rethink our binary response variable. Perhaps we should make this a multi-class classification problem.
+From these results we can see that 3 filters with a pool size of 2 and learning rate of 100 do a decent job in terms of validation accuracy within the first epoch. Note: this is simply one set of parameters in the entire feature space. Ideally, if we had enough time we would loop over an entire grid of parameters to understand the full surface. Furthermore, the filters in this configuration (all the middle figures) illustrate a recognizable pattern in the top right corner(see fig. 11). This pattern actually appears to resemble the isosurface charge density outlines in figure 5. Furthermore, this pattern also matches the shape of p and d orbitals (see appendix). Given this, we are certain that a convolutional net can learn macroscopic features related to magnetism. 
 
+<p align="center"> 
+<img src="pattern.JPG">
+</p>
+<p align="center"> 
+Figure 11. Consistent identifiable pattern highlighted in red. Pattern is seen consistenlty across numerous parameters and indicates potential to uncover microscopic origins of magnetism.
+</p>
 
 ## Future Investigation
 
+We believe there are a number of steps to take moving forward that could significantly impact our ability to understand magnetism in these materials rapidly.
+
+- We need to think more carefully about our inputs and outputs:
+	- inputs: we are currently feeding in an entire charge density profile, but maybe we can learn better by compressing this data to certain isosurfaces. 
+	- outputs: we used a 4 Bohr magneton splitting criteria but what we should ideally do is define a unique classifier (e.g. the magnetic order of the compound).
+
+- Parameter sweep: At present we are limiting ourselves to specific sections of the entire domain of possible combinations of parameters for the purposes of computation but one great way to tackle this challenge is to randomly sample points in this high dimensional space. For example, in table one we can sample 1 of 4 number of filters and combine that with 1 of 30 filter sizes and so on. The table values are simply placeholders and give a sense for some of the parameter ranges that were considered.
+
+<p align="center"> 
+<img src="extra1.JPG">
+</p>
+
+<p align="center"> 
+Table 2. An outline of the base model on the left and potential ranges of parameters on the right. Randomly sampling from this space may be significantly better than sequential sampling for both computation and accuracy. 
+</p>
+
+- More convolutions: It is often noticed that additional convolutional layers lead to increased performance. This means that there is a possibility that higher order terms and features are captured by these additional convolutional layers. This may be an important consideration in building our architecture and testing it. A quick run of the algorithm with 2 convolutional layers showed non-interpretable features and no improvement in score but this needs to be investigated thoroughly with better inputs/outputs.
 
 ## Conclusion
 
