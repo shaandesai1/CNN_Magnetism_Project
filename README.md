@@ -247,6 +247,15 @@ Initial effors to extract patterns from spin density profiles of 2-D FM material
 [14] M. Delakis and C. Garcia. http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.6.697&rep=rep1&type=pdf
 
 
+## Appendix 
+
+### A.1
+
+A figure illustrating the shape of s,p and d orbitals. These appear to be captured by our convolutional network.
+
+<p align="center"> 
+<img src="pdorbitals.png">
+</p>
 
 
 
@@ -256,6 +265,10 @@ Initial effors to extract patterns from spin density profiles of 2-D FM material
 
 
 
+
+
+
+## Code+Workflow
 
 
 The code in this repo allows you to run a Convolutional Neural Network with 3D charge density profiles as input. The code is configured to run both locally and on Harvard FAS RC GPU's.
