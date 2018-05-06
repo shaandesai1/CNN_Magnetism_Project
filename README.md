@@ -130,6 +130,31 @@ Since these are only our preliminary results, we segment them according to the v
 <img src="arch.JPG">
 </p>
 
+##### Parameters
+Number of Convolutions: 1
+
+Number of filters: 3
+
+Filter Size: (40,40,40)
+
+Stride: (1,1,1)
+
+Pool Size: (2,2,2)
+
+Learning Rate: 100
+
+Batch Size: 20
+
+Train/Test: 0.7/0.3
+
+Channels: 2
+
+Input Shape: (120X120X120X2) (x,y,z,channels)
+
+Dense Layer: 2
+
+
+
 With the given parameters, we swept over multiple filters and filter sizes to search for a model with a high validation accuracy and features that showed patterns. We realized that the most interpretable features were extractable at larger learning rates and we can see this here:
 
 <p align="center"> 
