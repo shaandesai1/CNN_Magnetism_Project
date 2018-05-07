@@ -1,19 +1,19 @@
-# Using convolutional neural networks to understand magnetism in two-dimensional ferromagnetic structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub>
+# Using convolutional neural networks to understand magnetism in two-dimensional structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub>
 
 
 ## Introduction
 
-Over the past decade, two-dimensional materials have demonstrated immense potential for creating advances in fundamental research and industrial applications. In particular, experimental and computational studies of the transition-metal based compounds [1,2] both highlight the emergence of numerous magnetic phases in two-dimensional crystals. These findings have sparked significant excitement in materials science for their potential use in data storage and spintronics applications. A notable example of this is Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> which was recently experimentally shown to exhibit ferromagnetism [3]. Despite these experimental observations and our general understanding of how magnetism arises in bulk crystals, we have yet to fully understand the specific mechanisms through which magnetism arises in these two-dimensional (2-D) materials. Developing this understanding could significantly impact (1), our ability to predict the properties of novel materials - new materials which are designed by decorating atomic sites of known 2-D structures with different atoms (see fig. 1) and (2), our ability to engineer materials for specific device applications. 
+Over the past decade, two-dimensional materials have demonstrated immense potential for creating advances in fundamental research and industrial applications. In particular, experimental and computational studies of the transition-metal based compounds [1,2] both highlight the emergence of numerous magnetic phases in two-dimensional crystals. These findings have sparked significant excitement in materials science for their potential use in data storage and spintronics applications. A notable example of this is Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> which was recently experimentally shown to exhibit ferromagnetism [3]. Despite these experimental observations and our general understanding of how magnetism arises in bulk crystals, we have yet to fully understand the specific mechanisms through which magnetism arises in these two-dimensional (2-D) materials. Developing this understanding could significantly impact our ability to accurately predict the magnetic properties of novel materials - designed by decorating atomic sites of known 2-D structures with different atoms (see fig. 1). In addition, this understanding could strengthen our ability to engineer materials for specific device applications. 
 
 
 <p align="center"> 
 <img src="fig1_ml.png">
 </p>
 
-<p align="center">Figure 1. Monolayer structure of a Transition Metal Dichalcogenide in the 2H phase where yellow spheres represent chalcogens and blakc spheres represent metals. By decorating these lattice sites with different atoms from the periodic table, we can develop a large space of testable '2-D' materials (adapted from Qing Hua Wang et al [4]) </p>
+<p align="center">Figure 1. Monolayer structure of a Transition Metal Dichalcogenide in the 2H phase where yellow spheres represent chalcogens and black spheres represent metals. By decorating these lattice sites with different atoms from the periodic table, we can develop a large space of testable '2-D' materials (adapted from Qing Hua Wang et al [4]) </p>
 
 
-For many years research groups have focused on improving density functional theory (DFT) calculations to capture such properties [5,6]. Yet these methods tend to be computationally and financially costly. Machine learning (ML) is rapidly paving the way to accurate property predictions in a much faster and cost-effective manner [7]. In addition, ML tools create avenues through which we can develop a better understanding of the properties themselves. For example, Pilania et.al have shown that machine learning methods can be used to accurately model bandgaps of double perovskites [8]. Furthermore, ML methods have also been shown to capture an understanding of the underlying physics in layers of a Neural Network trained to reproduce DFT results [9,10]. Given this, we decided to build a convolutional neural network architecture to develop a better understanding of magnetism in transition metal trichalcogenides(see fig. 2). Our preliminary results indicate that our model can capture large patterns linked to fluctuations in spin density across lattice sites. However, the microscopic origins of magnetism in these density profiles have not been identified yet through this approach.
+For many years research groups have focused on improving density functional theory (DFT) calculations to capture such properties [5,6]. Yet these methods tend to be computationally and financially costly. Machine learning (ML) is rapidly paving the way to accurate property predictions in a much faster and cost-effective manner [7]. In addition, ML tools create avenues through which we can develop a better understanding of the properties themselves. For example, Pilania et.al have shown that machine learning methods can be used to accurately model bandgaps of double perovskites [8]. Furthermore, ML methods have also been shown to capture an understanding of the underlying physics in layers of a Neural Network trained to reproduce DFT results [9,10]. Given this, we decided to build a convolutional neural network architecture to develop a better understanding of magnetism in transition metal trichalcogenides(see fig. 2). Initial results show promise for being able to identify patterns linked to fluctuations in spin density across lattice sites. However, the microscopic origins of magnetism in these density profiles have not yet been identified through this approach.
 
 <p align="center"> 
 <img src="tmtc.png">
@@ -39,7 +39,7 @@ Where L is the orbital angular momentum of the electron around the nucleus and S
 </p>
 
 
-In which σ<sub>i</sub> is the spin of one of the atomic electrons and J<sub>1</sub> is the interaction term that tells us how the spins of nearest neighbor atoms interact. In general, additional interactions between other atomic sites are neglected because the J<sub>1</sub> interaction is dominant in bulk crystals. This was also assumed to be the case in 2-D materials until Sivadas et al  showed that by adding J<sub>2</sub> and J<sub>3</sub> interaction terms into the Hamiltonian for 2-D materials (second and third nearest neighbor interactions), they were able to obtain results that agreed better with experiment [12]. Their resulting Heisenberg model is:
+In which σ<sub>i</sub> is the spin of one of the atomic electrons and J<sub>1</sub> is the interaction term that tells us how the spins of nearest neighbor atoms interact. Typically, interactions between 2nd and 3rd nearest neighbor sites are neglected because the J1 term is dominant in bulk crystals. However, Sivadas et al  showed that by adding J<sub>2</sub> and J<sub>3</sub> interaction terms into the Hamiltonian for 2-D materials (second and third nearest neighbor interactions), they were able to obtain results that agreed better with experiment [12]. Their resulting Heisenberg model is:
 
 <p align="center"> 
 <img src="ham2.JPG">
@@ -64,15 +64,15 @@ A Convolutional Neural Network is an ML algorithm which takes images as inputs a
 <img src="cnnarch.JPG">
 </p>
 
-<p align="center">Figure 4. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activationss. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter). Adapted from Stanford CS231n [13] </p>
+<p align="center">Figure 4. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activations. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter). Adapted from Stanford CS231n [13] </p>
 
-CNN’s have been used quite successfully for pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters [14]. Given this, we thought CNN’s would be a great way to detect patterns (exchange interactions) in large images (electron density profiles).
+CNN’s have been used quite successfully for pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters [14]. Given this, we thought CNN’s would be a great way to detect patterns manifested by exchange interactions in large images (electron density profiles).
 
 
 ## Methodology
 
 ### Data 
-We used DFT to build a database of structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub>. Our motivation in doing so was to replace the individual sites by different atoms so that we could obtain variations in the magnetic densities and order for training the ML model. We did this by replacing one of two chromium atoms (A sites) in unit cells with a transition metal. We restricted the transition metals to (Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru) in order to comprise most of the first row of TM’s and a few of the second. Substitutions for B were Ge,Ge<sub>0.5</sub>Si<sub>0.5</sub>,Ge<sub>0.5</sub>P<sub>0.5</sub>,Si and P. X sites were decorated with S, Se or Te. (Alternatively, see the table x).
+We used DFT to build a database of structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub>. Our motivation in doing so was to replace the individual sites by different atoms so that we could obtain variations in the spin densities and magnetic order for training the ML model. We did this by replacing one of two chromium atoms (A sites) in unit cells with a transition metal. We restricted the transition metals to (Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru) in order to comprise most of the first row of TM’s and a few of the second. Substitutions for B were Ge,Ge<sub>0.5</sub>Si<sub>0.5</sub>,Ge<sub>0.5</sub>P<sub>0.5</sub>,Si and P. X sites were decorated with S, Se or Te. (Alternatively, see the table x).
 
 <p align="center">
 	<img src="table1.JPG">
@@ -209,7 +209,7 @@ Figure 10.
 </p>
 
 
-From these results we can see that 3 filters with a pool size of 2 and learning rate of 100 do a decent job in terms of validation accuracy within the first epoch. Note: this is simply one set of parameters in the entire feature space. Ideally, if we had enough time we would loop over an entire grid of parameters to understand the full surface. Furthermore, the filters in this configuration (all the middle figures) illustrate a recognizable pattern in the top right corner(see fig. 11). This pattern actually appears to resemble the isosurface charge density outlines in figure 5. Furthermore, this pattern also matches the shape of p and d orbitals (see appendix). Given this, we are certain that a convolutional net can learn macroscopic features related to magnetism. 
+From these results we can see that 3 filters with a pool size of 2 and learning rate of 100 do a decent job in terms of validation accuracy within the first epoch. Note: this is simply one set of parameters in the entire feature space. Ideally, if we had enough time we would loop over an entire grid of parameters to understand the full surface. Furthermore, the filters in this configuration (all the middle figures) illustrate a recognizable pattern in the top right corner(see fig. 11). This pattern actually appears to resemble the isosurface charge density outlines in figure 5. Furthermore, this pattern also matches the shape of p and d orbitals (see appendix). Initial results are highly encouraging. They suggest that we may be able to learn features linking the spin density profile to the mechanisms for magnetic order. 
 
 <p align="center"> 
 <img src="pattern.JPG">
@@ -240,7 +240,7 @@ Table 2. An outline of the base model on the left and potential ranges of parame
 
 ## Conclusion
 
-Initial effors to extract patterns from spin density profiles of 2-D FM materials show great promise. Patterns learned from smaller filters appear to describe atomic orbitals well. Closer investigation into the framework may lead to a deeper understanding of the microscopic origins of magnetism. 
+Initial efforts to extract patterns from spin density profiles of 2-D FM materials show great promise. Patterns learned from smaller filters appear to describe atomic orbitals. Further investigation using this framework may lead to a deeper understanding of the microscopic origins of magnetism in two-dimensions.
 
 ## References
 [1] M.A. McGuire, H. Dixit, V.R. Cooper, and B. C. Sales, Chem.Mater. 27, 612 (2015)
@@ -322,7 +322,7 @@ See the benchmarking excel sheet of the different configurations already run and
 
 <b>Notes on Architecture</b>
 
-- The point of running this model is to be able to capture patterns such as Nearest Neighbor exchange in filters. Note that Sivadas et al show that these occur on the order of atomic lengths which means we should probably scale our unit cell to a supercell (done in cnn_largep.py in function matmul) as well as increase our filter sizes to greater than 60 in each dimension.
+- The point of running this model is to be able to capture patterns in the spin density that arises from nearest neighbor exchange interactions. Note that Sivadas et al show that these occur on the order of atomic lengths which means we should probably scale our unit cell to a supercell (done in cnn_largep.py in function matmul) as well as increase our filter sizes to greater than 60 in each dimension.
 - We need to think carefully about the classification model we are building. At present, we are classifying composites as 1's if they have a bohr magneton > 4. However, this cutoff was determined using a histogram.
 - At present we believe we should have 3 filters because this is consistent with Sivadas et al and the number of patterns they present, however, it might be the case that more are needed to capture superexchange.
 - Need to figure out how to get granularity.
