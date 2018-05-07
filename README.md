@@ -1,6 +1,3 @@
-
-# AC299R - Shaan Desai
-
 # Using convolutional neural networks to understand magnetism in two-dimensional structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub>
 
 
