@@ -13,7 +13,7 @@ Over the past decade, two-dimensional materials have demonstrated immense potent
 <p align="center">Figure 1. Monolayer structure of a Transition Metal Dichalcogenide in the 2H phase where yellow spheres represent chalcogens and black spheres represent metals. By decorating these lattice sites with different atoms from the periodic table, we can develop a large space of testable '2-D' materials (adapted from Qing Hua Wang et al [4]) </p>
 
 
-For many years research groups have focused on improving density functional theory (DFT) calculations to capture such properties [5,6]. Yet these methods tend to be computationally and financially costly. Machine learning (ML) is rapidly paving the way to accurate property predictions in a much faster and cost-effective manner [7]. In addition, ML tools create avenues through which we can develop a better understanding of the properties themselves. For example, Pilania et.al have shown that machine learning methods can be used to accurately model bandgaps of double perovskites [8]. Furthermore, ML methods have also been shown to capture an understanding of the underlying physics in layers of a Neural Network trained to reproduce DFT results [9,10]. Given this, we decided to build a convolutional neural network architecture to develop a better understanding of magnetism in transition metal trichalcogenides(see fig. 2). Initial results show promise for being able to identify patterns linked to fluctuations in spin density across lattice sites. However, the microscopic origins of magnetism in these density profiles have not yet been identified through this approach.
+For many years research groups have focused on improving density functional theory (DFT) calculations to capture such properties [5,6]. Yet these methods tend to be computationally and financially costly. Machine learning (ML) is rapidly paving the way to accurate property predictions in a much faster and cost-effective manner [7]. In addition, ML tools create avenues through which we can develop a better understanding of the properties themselves. For example, Pilania et.al have shown that machine learning methods can be used to accurately model bandgaps of double perovskites [8]. Furthermore, ML methods have also been shown to capture an understanding of the underlying physics in layers of a Neural Network trained to reproduce DFT results [9]. Given this, we decided to build a convolutional neural network architecture to develop a better understanding of magnetism in transition metal trichalcogenides(see fig. 2). Initial results show promise for being able to identify patterns linked to fluctuations in spin density across lattice sites. However, the microscopic origins of magnetism in these density profiles have not yet been identified through this approach.
 
 <p align="center"> 
 <img src="tmtc.png">
@@ -26,20 +26,20 @@ For many years research groups have focused on improving density functional theo
 
 ### Magnetism
 
-Our choice of algorithm and data to address this challenge was governed by our current understanding of magnetism. We know that magnetism in materials arises because of the quantum nature of electrons [11]. Specifically, we know that the net magnetic moment (J) of a single atom is:
+At present we know that magnetism in materials arises because of the quantum nature of electrons [10]. Specifically, we know that the net magnetic moment (J) of a single atom is:
 
 <p align="center"> 
 J=L±S
 </p>
 
-Where L is the orbital angular momentum of the electron around the nucleus and S is the intrinsic spin angular momentum of the electron. When many atoms are placed next to each other in a crystalline structure, it is possible for electrons in the atomic orbitals to overlap and adhere to the Pauli exclusion principle (which states that two or more identical fermions cannot occupy the same quantum state within a quantum system). As a consequence, the spins can order in a particular manner, for instance they can align in either parallel or anti-parallel configurations. These spin orderings can be modeled using the Heisenberg model. It assumes that the dominant coupling between two dipoles may cause nearest-neighbors to have lowest energy when they are aligned. This results in a Hamiltonian on a honeycomb lattice where:
+Where L is the orbital angular momentum of the electron around the nucleus and S is the intrinsic spin angular momentum of the electron. When many atoms are placed next to each other in a crystalline structure, it is possible for electrons in the atomic orbitals to overlap and adhere to the Pauli exclusion principle (which states that two or more identical fermions cannot occupy the same quantum state within a quantum system). As a consequence, the spins can order in a particular manner, for instance they can align in either parallel or anti-parallel configurations and as such give rise to different magnetic properties. These spin orderings can be mathematically modeled using the Heisenberg model in which a spin operator J acts on nearest-neighbor coupled spins. Since we deal with TMTC's which are in a honeycomb lattice, the resulting model is:
 
 <p align="center"> 
 <img src="ham1.JPG">
 </p>
 
 
-In which σ<sub>i</sub> is the spin of one of the atomic electrons and J<sub>1</sub> is the interaction term that tells us how the spins of nearest neighbor atoms interact. Typically, interactions between 2nd and 3rd nearest neighbor sites are neglected because the J1 term is dominant in bulk crystals. However, Sivadas et al  showed that by adding J<sub>2</sub> and J<sub>3</sub> interaction terms into the Hamiltonian for 2-D materials (second and third nearest neighbor interactions), they were able to obtain results that agreed better with experiment [12]. Their resulting Heisenberg model is:
+In which σ<sub>i</sub> is the spin of one of the atomic electrons and J<sub>1</sub> is the interaction term that tells us how the spins of nearest neighbor atoms interact. Typically, interactions between 2nd and 3rd nearest neighbor sites are neglected because the J1 term is dominant in bulk crystals. However, Sivadas et al  showed that by adding J<sub>2</sub> and J<sub>3</sub> interaction terms into the Hamiltonian for 2-D materials (second and third nearest neighbor interactions), they were able to obtain results that agreed better with experiment [11]. Their resulting Heisenberg model is:
 
 <p align="center"> 
 <img src="ham2.JPG">
@@ -51,7 +51,7 @@ Furthermore, they visually illustrate [FIG 3] how these interactions could take 
 <img src="sivadas.png">
 </p>
 
-<p align="center">Figure 3. 3 pathways presented for Nearest Neighbor exchange. a) represents the second nearest neighbor, b) the third and c) the first (direct exchange-vertical and superexchange- 87.9 angle). Adapted from Sivadas et al [12] </p>
+<p align="center">Figure 3. 3 pathways presented for Nearest Neighbor exchange. a) represents the second nearest neighbor, b) the third and c) the first (direct exchange-vertical and superexchange- 87.9 angle). Adapted from Sivadas et al [11] </p>
 
 
 These results inspired us to ask the following question: can we find evidence of exchange interactions (patterns) by analyzing the spin density profiles (images) of 2-D materials? One natural approach for this was to use a convolutional neural network (CNN). 
@@ -64,9 +64,9 @@ A Convolutional Neural Network is an ML algorithm which takes images as inputs a
 <img src="cnnarch.JPG">
 </p>
 
-<p align="center">Figure 4. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activations. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter). Adapted from Stanford CS231n [13] </p>
+<p align="center">Figure 4. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activations. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter). Adapted from Stanford CS231n [12] </p>
 
-CNN’s have been used quite successfully for pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters [14]. Given this, we thought CNN’s would be a great way to detect patterns manifested by exchange interactions in large images (electron density profiles).
+CNN’s have been used quite successfully for pattern recognition in images. For example, CNN’s trained on human faces were shown to detect facial characteristics within their filters [13]. Given this, we thought CNN’s would be a great way to detect patterns manifested by exchange interactions in large images (electron density profiles).
 
 
 ## Methodology
@@ -261,15 +261,13 @@ Initial efforts to extract patterns from spin density profiles of 2-D FM materia
 
 [9] E.D. Cubuk, M.D. Brad, O. Berk, W. Amos, E. Kaxiras. J. Chem. Phys. 147, 024104 (2017)
 
-[10] T. Ueno, T.D. Rhone, Z. Hou, and K. Tsuda. DOI: 10.1016/j.md.2016.04.001 (2016)
+[10] J. M. D. Coey. Cambridge Press. 9780521816144 (2009)
 
-[11] J. M. D. Coey. Cambridge Press. 9780521816144 (2009)
+[11] N. Sivadas, M.W. Daniels, R.H.Swendsen,S.Okamoto, and D.Xiao. J. Phys. Rev. B. 91, 235425 (2015)
 
-[12] N. Sivadas, M.W. Daniels, R.H.Swendsen,S.Okamoto, and D.Xiao. J. Phys. Rev. B. 91, 235425 (2015)
+[12] http://cs231n.github.io/convolutional-networks/
 
-[13] http://cs231n.github.io/convolutional-networks/
-
-[14] M. Delakis and C. Garcia. http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.6.697&rep=rep1&type=pdf
+[13] M. Delakis and C. Garcia. http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.6.697&rep=rep1&type=pdf
 
 
 ## Appendix 
