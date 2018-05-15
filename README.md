@@ -306,12 +306,121 @@ The code in this repo allows you to run a Convolutional Neural Network with 3D c
 
 <i>Instructions to get setup using a GPU</i>
 
-Read through the evernote on GPU's in Odyssey (v2.0). The quickest way to setup is to initially just use CNN.py and folow the instructions to create a conda environment and install keras in it as well as load modules. Initially the file you will need is tester.py which is a CNN that runs on the MNIST dataset. You will have to use srun to run the code or you can create a small sbatch file to run it.
+Guide to Using Odyssey
+The following instructions should serve as a preliminary guide to installing the modules needed to run a keras+tensorflow backend python script on a SLURM node. If you know this well, skip to the next section.
 
-Only once the above works can you move forward!
+General Workflow: [PLEASE READ IF YOU DON'T KNOW ODYSSEY WELL]
+Step 1. Request an rc.fas.harvard.edu account from FASRC
+
+Step 2. Once your account is created you will be sent an e-mail to create a password for the account.
+
+Step 3. After all of this you will need to set up the 2 factor authentication (verification code) by either downloading google authenticator onto your phone or the necessary program on your laptop. This is a 6 digit code generator in time. Look up the FASRC website on detailed instructions.
+
+Step 4. If you are using linux login by: ssh [yourusername]@odyssey.rc.fas.harvard.edu, when prompted enter your password and verification code. If you are using windows - download putty or the ubuntu subsystem. Both will let you ssh into the login node.
+
+Step 5. Once you are logged in, you are at a login node. DO NOT RUN YOUR SCRIPTS ON THIS NODE! The FAS software is designed to kill any scripts that run on this node. This node is meant to be where you 'download' the necessary software to run your scripts/handle your scripts.
+
+NOTES [IMPORTANT] - Read these notes carefully because they clarify how the system operates.
+
+	* 
+Memory: the login node has 100gb of data, you can copy files to it by using scp in linux or using 'filezilla' on windows. If you require more space, look up /scratch.
+	* 
+Running Scripts: SLURM is a resource manager, it basically knows how to allocate the right resources to run the necessary scripts. There are 2 main ways to run your code:
+
+		* 
+SBATCH - you send a job to slurm to handle the work for you, this means including a .sh file and specifying all the necessary commands e.g. number of processors etc. It is batch processing and non-blocking.
+		* 
+SRUN - an interactive script meaning you cannot write commands while it is run (think of this as a way to 'login' to one of the compute nodes and then run your code on it)
+	* 
+Libraries/Modules: In many cases you will need compilers/python/ and other libraries to run your code which are NOT automatically loaded onto the nodes and which cannot be installed using 'sudo apt install'. Many of the commonly used software has been packaged into 'modules' on the FAS RC system. This means you can load them into your environment by running module load MODULENAME. A list of all the modules can be seen by running module list.
+	* 
+Environments: When you run a script with sbatch/srun you are doing so in your 'home' environment (the environment of your local directory which is your login node). This means that any installations or modules loaded will be exported with your scripts to the actual 'compute nodes'. For example, if i use <module load python4.0-fasrc01> on my login node, then this is the python version that will run on my job. Sometimes you might want to run different versions of python/work with different libraries- the best way to do this is to create a conda environment. Each conda environment can be thought of as an isolated unit with its own libraries and functions which allows you to install (via pip) the libraries you want without influencing other programs. see RC for how to create a conda environment.
+
+
+
+Step 7. Now that you know how the system operates you can load the modules you need and run the scripts you'd like. See the RC website for examples of both sbatch and srun code. 
+
+
+Keras+Tensorflow Backend on GPU: SRUN version
+
+Here I detail how to run tester.py - a keras CNN on the MNIST dataset.
+
+Step 1. Ask me for the tester.py script.
+
+Step 2. login to odyssey.
+
+Step 3. copy tester.py onto the node using scp(linux)
+
+Step 4. module load the python version you are interested in and create a conda environment using:
+
+conda create -n Keras --clone $PYTHON_HOME
+
+where -n means new and Keras is the name of the environment ( you can name it something convenient)
+
+Step 4. use the following command  to request a number of gpus/cpus:
+
+srun --pty --mem 4000 --gres gpu:1 -t 0-1:00 -p gpu /bin/bash
+--pty: makes srun give you a terminal environment
+--mem: specifies the amount of memory needed on the node
+--gres: refers to general resource with gpu:n where n specifies number of GPU's
+-t: the time needed on the nodes
+ 
+Step 5. once you are onto the supermicgpu01, run a module load:
+
+module load gcc/4.9.3-fasrc01 cuda/7.5-fasrc02 tensorflow/1.0.0-fasrc02
+
+which loads a gcc compiler and the cuda environment which will run the tensorflow code on a GPU.
+
+Step 6. run 'source activate Keras' to go into the Keras conda environment
+
+Step 7. run 'pip install Keras'
+
+Step 8. run 'python tester.py' and you should see the program running. Epochs should run for an avg of 13seconds on a single GPU node.
+
+
+Resources:
+https://portal.rc.fas.harvard.edu/apps/modules/Keras
+https://www.rc.fas.harvard.edu/resources/documentation/gpgpu-computing-on-odyssey/
+
+
+### Running cnn_largep.py and our model on GPU's
+
+Step 1: login in to a node
+Step 2: create a python 3.6 environment by:
+
+conda create -n myenv python=3.6
+
+where myenv is the name of the environment
+
+Step 3: install keras in myenv using:
+
+source activate myenv
+
+pip install keras
+
+Step 4: Two ways to launch our code, srun and sbatch. I outline the srun way but the sbatch way code is also provided
+
+type:
+
+srun --pty --mem 1000 --gres=gpu:2 -p gpu /bin/bash
+
+Step 5: load the tensorflow modules
+
+module load gcc/4.8.2-fasrc01 cuda/7.5-fasrc02 tensorflow/1.3.0-fasrc01
+
+Step 6:
+
+source activate myenv
+
+python CNN.py
+
+
+To do this in sbatch, simply look at cnn_largep.batch which loads all modules for you. Simply carry out steps 1 through 3 and then type:
+
+sbatch cnn_largep.batch
+
+
 You should now be ready to run our CNN. Configure the CNN in CNN.py to your liking and download a file called chgd_input which is linked here: https://www.dropbox.com/s/iquhjkpvhz7c7g6/chgdf_input?dl=0 into the same directory into your local node on Odyssey. Also download cnn.batch and configure the filenames you want to store. Once done, simply run <sbatch cnn.batch>. The great thing about sbatch is that you can edit your file, run an sbatch, and then repeat. It allows you to change variables in your local node and send jobs with the new parameters to worker nodes.
-
-Once all of this works, use cnn_largep.py and cnn_largep.batch which will run a supercell and do everything on 2 GPU's. edit cnn_largep.py when you want to change filters etc.
 
 See the benchmarking excel sheet of the different configurations already run and results I can provide. Seems like larger learning rates are better.
 
