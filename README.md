@@ -327,3 +327,10 @@ See the benchmarking excel sheet of the different configurations already run and
 - Need to understand why a large learning rate yields a more interpretable pattern.
 - Need more datab
 
+
+
+Links for Data:
+
+chgdf_input : https://www.dropbox.com/s/iquhjkpvhz7c7g6/chgdf_input?dl=0
+
+chgdf_new_input : https://www.dropbox.com/s/s5qygz96h98zr1o/chgdf_new_input?dl=0
