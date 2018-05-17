@@ -7,7 +7,7 @@ Over the past decade, two-dimensional materials have demonstrated immense potent
 
 
 <p align="center"> 
-<img src="fig1_ml.png">
+<img src="Website_data/fig1_ml.png">
 </p>
 
 <p align="center">Figure 1. Monolayer structure of a Transition Metal Dichalcogenide in the 2H phase where yellow spheres represent chalcogens and black spheres represent metals. By decorating these lattice sites with different atoms from the periodic table, we can develop a large space of testable '2-D' materials (adapted from Qing Hua Wang et al [4]) </p>
@@ -16,7 +16,7 @@ Over the past decade, two-dimensional materials have demonstrated immense potent
 For many years research groups have focused on improving density functional theory (DFT) calculations to capture such properties [5,6]. Yet these methods tend to be computationally and financially costly. Machine learning (ML) is rapidly paving the way to accurate property predictions in a much faster and cost-effective manner [7]. In addition, ML tools create avenues through which we can develop a better understanding of the properties themselves. For example, Pilania et.al have shown that machine learning methods can be used to accurately model bandgaps of double perovskites [8]. Furthermore, ML methods have also been shown to capture an understanding of the underlying physics in layers of a Neural Network trained to reproduce DFT results [9]. Given this, we decided to build a convolutional neural network architecture to develop a better understanding of magnetism in transition metal trichalcogenides(see fig. 2). Initial results show promise for being able to identify patterns linked to fluctuations in spin density across lattice sites. However, the microscopic origins of magnetism in these density profiles have not yet been identified through this approach.
 
 <p align="center"> 
-<img src="tmtc.png">
+<img src="Website_data/tmtc.png">
 </p>
 
 <p align="center">Figure 2. ABX<sub>3</sub> structure of a transition metal trichalcogenide. 'A' sites represent Transition Metals, 'B' sites typically represent group 4 and 5 atoms and 'X' sites represent the chalcogens (group 6). </p>
@@ -35,20 +35,20 @@ J=L±S
 Where L is the orbital angular momentum of the electron around the nucleus and S is the intrinsic spin angular momentum of the electron. When many atoms are placed next to each other in a crystalline structure, it is possible for electrons in the atomic orbitals to overlap and adhere to the Pauli exclusion principle (which states that two or more identical fermions cannot occupy the same quantum state within a quantum system). As a consequence, the spins can order in a particular manner, for instance they can align in either parallel or anti-parallel configurations and as such give rise to different magnetic properties. These spin orderings can be mathematically modeled using the Heisenberg model in which a spin operator J acts on nearest-neighbor coupled spins. Since we deal with TMTC's which are in a honeycomb lattice, the resulting model is:
 
 <p align="center"> 
-<img src="ham1.JPG">
+<img src="Website_data/ham1.JPG">
 </p>
 
 
 In which σ<sub>i</sub> is the spin of one of the atomic electrons and J<sub>1</sub> is the interaction term that tells us how the spins of nearest neighbor atoms interact. Typically, interactions between 2nd and 3rd nearest neighbor sites are neglected because the J1 term is dominant in bulk crystals. However, Sivadas et al  showed that by adding J<sub>2</sub> and J<sub>3</sub> interaction terms into the Hamiltonian for 2-D materials (second and third nearest neighbor interactions), they were able to obtain results that agreed better with experiment [11]. Their resulting Heisenberg model is:
 
 <p align="center"> 
-<img src="ham2.JPG">
+<img src="Website_data/ham2.JPG">
 </p>
 
 Furthermore, they visually illustrate [FIG 3] how these interactions could take place.
 
 <p align="center"> 
-<img src="sivadas.png">
+<img src="Website_data/sivadas.png">
 </p>
 
 <p align="center">Figure 3. 3 pathways presented for Nearest Neighbor exchange. a) represents the second nearest neighbor, b) the third and c) the first (direct exchange-vertical and superexchange- 87.9 angle). Adapted from Sivadas et al [11] </p>
@@ -61,7 +61,7 @@ These results inspired us to ask the following question: can we find evidence of
 A Convolutional Neural Network is an ML algorithm which takes images as inputs and then convolves these images with 'filters' to produce outputs which can be pooled/flattened or used to make a decision. An example architecture is highlighted in fig. 4.
 
 <p align="center"> 
-<img src="cnnarch.JPG">
+<img src="Website_data/cnnarch.JPG">
 </p>
 
 <p align="center">Figure 4. Left: A regular 3-layer Neural Network. Right: A convolutional net arranges its neurons in three dimensions, as visualized in one of the layers. Every layer of a CNN transforms the 3-D input volume to a 3-D output volume of neuron activations. In this example, the red input layer holds the image, so itds width and height would be the dimensions of the image and the depth would be 3 (Red,Green,Blue channels). Note: We can add an additional dimension for 4-D information (e.g. figures in x,y and z with a channels parameter). Adapted from Stanford CS231n [12] </p>
@@ -75,7 +75,7 @@ CNN’s have been used quite successfully for pattern recognition in images. For
 We used DFT to build a database of structures based on Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub>. Our motivation in doing so was to replace the individual sites by different atoms so that we could obtain variations in the spin densities and magnetic order for training the ML model. We did this by replacing one of two chromium atoms (A sites) in unit cells with a transition metal. We restricted the transition metals to (Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Y,Nb,Ru) in order to comprise most of the first row of TM’s and a few of the second. Substitutions for B were Ge,Ge<sub>0.5</sub>Si<sub>0.5</sub>,Ge<sub>0.5</sub>P<sub>0.5</sub>,Si and P. X sites were decorated with S, Se or Te. (Alternatively, see the table x).
 
 <p align="center">
-	<img src="table1.JPG">
+	<img src="Website_data/table1.JPG">
 </p>
 <p align="center">
 	Table 1. List of elements used at each of the TMTC sites.
@@ -86,7 +86,7 @@ We used DFT to build a database of structures based on Cr<sub>2</sub>Ge<sub>2</s
 For each composite, DFT total energies of the relaxed structures were calculated for several initial spin configurations: non-spin polarized, ferromagnetic and Neel antiferromagnetic. The resultant spin density profiles (60X60X120 images (see fig. 5) contain information relevent to magnetism and thus served as input to our ML models. 
 
 <p align="center"> 
-<img src="lattice.JPG">
+<img src="Website_data/lattice.JPG">
 </p>
 
 <p align="center">Figure 5. Left: unit cell of Cr<sub>2</sub>Ge<sub>2</sub>Te<sub>6</sub> (in the x-y plane) with spin density isosurfaces overlaid at charge values of 7.3e-5. The yellow surfaces are positive densities and the blue are negative. Blue spheres represent Chromium sites, purple spheres represent Germanium and yellow sphere represent Tellerium. Right: average projection of charge densities in the x-y plane.  </p>
@@ -98,7 +98,7 @@ For each composite, DFT total energies of the relaxed structures were calculated
 To begin our investigation, we used the FM spin configuration which comprise mixing of all the A and B sites shown in Table 1 with X = Te. We also needed a target (response) variable and decided to use magnetic moment as a means for classification. For our initial model we chose 4 Bohr magnetons (the mean of our distribution) as a splitting criterion for training a classification model (see fig 6). Note, our 3-D charge densities are handled easily by the python Neural Network packages, keras and tensorflow. 
  
 <p align="center"> 
-<img src="bohr.JPG">
+<img src="Website_data/bohr.JPG">
 </p>
 
 <p align="center"> Figure 6. Distribution of response variables appears to illustrate mixture of two gaussians. As such, we use the mean, highlighted in green, as the splitting criteria which leads to 37 values below 4 Bohr magnetons and 25 above.  </p>
@@ -127,7 +127,7 @@ Convolutional Networks require significant computation and memory to run. While 
 Since these are only our preliminary results, we segment them according to the various parameters we swept over. To do this we needed to define a base model. Using the parameters discussed previously we use the following as our base model:
 
 <p align="center"> 
-<img src="arch.JPG">
+<img src="Website_data/arch.JPG">
 </p>
 
 ##### Parameters
@@ -158,10 +158,10 @@ Dense Layer: 2
 With the given parameters, we swept over multiple filters and filter sizes to search for a model with a high validation accuracy and features that showed patterns. We realized that the most interpretable features were extractable at larger learning rates and we can see this here:
 
 <p align="center"> 
-<img src="lr1.JPG">
+<img src="Website_data/lr1.JPG">
 </p>
 <p align="center"> 
-<img src="lr2.JPG">
+<img src="Website_data/lr2.JPG">
 </p>
 
 
@@ -173,10 +173,10 @@ Given that a high learning rate led to good accuracies and an interpretable filt
 
 ### Varying # of kernels
 <p align="center"> 
-<img src="filterno.JPG">
+<img src="Website_data/filterno.JPG">
 </p>
 <p align="center"> 
-<img src="filterno1.JPG">
+<img src="Website_data/filterno1.JPG">
 </p>
 
 <p align="center"> 
@@ -187,10 +187,10 @@ Figure 8.
 ### Varying pool size
 
 <p align="center"> 
-<img src="poolno.JPG">
+<img src="Website_data/poolno.JPG">
 </p>
 <p align="center"> 
-<img src="poolno1.JPG">
+<img src="Website_data/poolno1.JPG">
 </p>
 <p align="center"> 
 Figure 9. 
@@ -199,10 +199,10 @@ Figure 9.
 ### Varying learning rate
 
 <p align="center"> 
-<img src="lrnew.JPG">
+<img src="Website_data/lrnew.JPG">
 </p>
 <p align="center"> 
-<img src="lrnew1.JPG">
+<img src="Website_data/lrnew1.JPG">
 </p>
 <p align="center"> 
 Figure 10.
@@ -212,7 +212,7 @@ Figure 10.
 From these results we can see that 3 filters with a pool size of 2 and learning rate of 100 do a decent job in terms of validation accuracy within the first epoch. Note: this is simply one set of parameters in the entire feature space. Ideally, if we had enough time we would loop over an entire grid of parameters to understand the full surface. Furthermore, the filters in this configuration (all the middle figures) illustrate a recognizable pattern in the top right corner(see fig. 11). This pattern actually appears to resemble the isosurface charge density outlines in figure 5. Furthermore, this pattern also matches the shape of p and d orbitals (see appendix). Initial results are highly encouraging. They suggest that we may be able to learn features linking the spin density profile to the mechanisms for magnetic order. 
 
 <p align="center"> 
-<img src="pattern.JPG">
+<img src="Website_data/pattern.JPG">
 </p>
 <p align="center"> 
 Figure 11. Consistent identifiable pattern highlighted in red. Pattern is seen consistenlty across numerous parameters and indicates potential to uncover microscopic origins of magnetism.
@@ -229,7 +229,7 @@ We believe there are a number of steps to take moving forward that could signifi
 - Parameter sweep: At present we are limiting ourselves to specific sections of the entire domain of possible combinations of parameters for the purposes of computation but one great way to tackle this challenge is to randomly sample points in this high dimensional space. For example, in table one we can sample 1 of 4 number of filters and combine that with 1 of 30 filter sizes and so on. The table values are simply placeholders and give a sense for some of the parameter ranges that were considered.
 
 <p align="center"> 
-<img src="extra1.JPG">
+<img src="Website_data/extra1.JPG">
 </p>
 
 <p align="center"> 
@@ -277,7 +277,7 @@ Initial efforts to extract patterns from spin density profiles of 2-D FM materia
 A figure illustrating the shape of s,p and d orbitals. These appear to be captured by our convolutional network.
 
 <p align="center"> 
-<img src="pdorbitals.png">
+<img src="Website_data/pdorbitals.png">
 </p>
 
 
@@ -322,18 +322,17 @@ Step 5. Once you are logged in, you are at a login node. DO NOT RUN YOUR SCRIPTS
 
 NOTES [IMPORTANT] - Read these notes carefully because they clarify how the system operates.
 
-	* 
 Memory: the login node has 100gb of data, you can copy files to it by using scp in linux or using 'filezilla' on windows. If you require more space, look up /scratch.
-	* 
+ 
 Running Scripts: SLURM is a resource manager, it basically knows how to allocate the right resources to run the necessary scripts. There are 2 main ways to run your code:
 
-		* 
+ 
 SBATCH - you send a job to slurm to handle the work for you, this means including a .sh file and specifying all the necessary commands e.g. number of processors etc. It is batch processing and non-blocking.
-		* 
+ 
 SRUN - an interactive script meaning you cannot write commands while it is run (think of this as a way to 'login' to one of the compute nodes and then run your code on it)
-	* 
+ 
 Libraries/Modules: In many cases you will need compilers/python/ and other libraries to run your code which are NOT automatically loaded onto the nodes and which cannot be installed using 'sudo apt install'. Many of the commonly used software has been packaged into 'modules' on the FAS RC system. This means you can load them into your environment by running module load MODULENAME. A list of all the modules can be seen by running module list.
-	* 
+ 
 Environments: When you run a script with sbatch/srun you are doing so in your 'home' environment (the environment of your local directory which is your login node). This means that any installations or modules loaded will be exported with your scripts to the actual 'compute nodes'. For example, if i use <module load python4.0-fasrc01> on my login node, then this is the python version that will run on my job. Sometimes you might want to run different versions of python/work with different libraries- the best way to do this is to create a conda environment. Each conda environment can be thought of as an isolated unit with its own libraries and functions which allows you to install (via pip) the libraries you want without influencing other programs. see RC for how to create a conda environment.
 
 
@@ -386,7 +385,7 @@ https://www.rc.fas.harvard.edu/resources/documentation/gpgpu-computing-on-odysse
 ### Running cnn_largep.py and our model on GPU's
 
 Step 1: login in to a node
-Step 2: create a python 3.6 environment by:
+Step 2: create a python 3.6 environment (needed for the keras version we use) by:
 
 conda create -n myenv python=3.6
 
@@ -404,7 +403,7 @@ type:
 
 srun --pty --mem 1000 --gres=gpu:2 -p gpu /bin/bash
 
-Step 5: load the tensorflow modules
+Step 5: load the tensorflow modules which are compatible with python 3.6
 
 module load gcc/4.8.2-fasrc01 cuda/7.5-fasrc02 tensorflow/1.3.0-fasrc01
 
@@ -430,11 +429,11 @@ See the benchmarking excel sheet of the different configurations already run and
 <b>Notes on Architecture</b>
 
 - The point of running this model is to be able to capture patterns in the spin density that arises from nearest neighbor exchange interactions. Note that Sivadas et al show that these occur on the order of atomic lengths which means we should probably scale our unit cell to a supercell (done in cnn_largep.py in function matmul) as well as increase our filter sizes to greater than 60 in each dimension.
-- We need to think carefully about the classification model we are building. At present, we are classifying composites as 1's if they have a bohr magneton > 4. However, this cutoff was determined using a histogram.
+- We need to think carefully about the classification model we are building. At present, in the original folder we are classifying composites as 1's if they have a bohr magneton > 4. However, this cutoff was determined using a histogram. In the new_data folder we are using a classification of 1's for AFM and 0's for FM.
 - At present we believe we should have 3 filters because this is consistent with Sivadas et al and the number of patterns they present, however, it might be the case that more are needed to capture superexchange.
 - Need to figure out how to get granularity.
 - Need to understand why a large learning rate yields a more interpretable pattern.
-- Need more datab
+- Need more data
 
 
 
