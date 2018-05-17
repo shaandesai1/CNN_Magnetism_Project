@@ -411,7 +411,7 @@ Step 6:
 
 source activate myenv
 
-python CNN.py
+python cnn_largep.py
 
 
 To do this in sbatch, simply look at cnn_largep.batch which loads all modules for you. Simply carry out steps 1 through 3 and then type:
@@ -424,6 +424,29 @@ You should now be ready to run our CNN. Configure the CNN in CNN.py to your liki
 See the benchmarking excel sheet of the different configurations already run and results I can provide. Seems like larger learning rates are better.
 
 6. After running your code, you can copy the h5 file output into your local machine and run visualizer.ipynb which will let you see projections of your filter.
+
+
+
+
+# Code Descriptions
+
+preproc+visualizer:
+chgcar.py - scrapes spin density data into a folder on a cluster
+magdensity_splitter.ipynb - splits charge densites and keeps relevant one
+scraper.ipynb - converts chgcar to dataframe and determines response
+newscraper.ipynb - (assumes you used the above code to convert chgcar to dataframes and didn't do anything to response) this will create AFM/FM response and save it as a main dataframe.
+
+
+Scripts/Original:
+CNN.ipynb/CNN.py - simply run a 3D convolutional net on the bohr magneton data as response, there is no GPU training.
+cnn_large.py - converts the 60X60 grids to NX60XNX60 grids to allow for larger filters
+cnn_largep.py - the above script with multi gpu module that lets us train on multiple GPU's
+
+.batch files are used to simply submit jobs
+
+Scripts/new_data:
+cnn_new_data.ipynb - code to run the new dataset which is larger and in which the response is AFM/FM. Does not include parallelization component (its 2 lines of code which you can copy from cnn_largep.py).
+
 
 
 <b>Notes on Architecture</b>
